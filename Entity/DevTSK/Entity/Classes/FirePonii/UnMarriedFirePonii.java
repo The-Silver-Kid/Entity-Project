@@ -1,4 +1,4 @@
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.FirePonii;
 
 import DevTSK.Util.Day;
 

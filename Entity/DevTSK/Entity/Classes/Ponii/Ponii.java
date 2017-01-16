@@ -1,4 +1,6 @@
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.Ponii;
+
+import DevTSK.Entity.Entity;
 
 public abstract class Ponii extends Entity {
 

@@ -1,10 +1,10 @@
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.PlanePonii;
 
 import DevTSK.Util.Day;
 
-public class MarriedPlane extends PlanePonii {
+public class MarriedPlaneWithOtherKids extends PlanePonii {
 
-	public MarriedPlane(String Name, String AlternateName, String Flag, Boolean Gender, Boolean IsVamponii, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String MarriedTo, int kidAmmount, String[] Kids) {
+	public MarriedPlaneWithOtherKids(String Name, String AlternateName, String Flag, Boolean Gender, Boolean IsVamponii, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String MarriedTo, int kidAmmount, String[] Kids, String[] kidOtherParent) {
 		this.name = Name;
 		this.Gender = Gender;
 		this.description = "\nPlane" + Description;
@@ -15,6 +15,7 @@ public class MarriedPlane extends PlanePonii {
 		this.father = Father;
 		this.birthday = bday;
 
+		this.with = kidOtherParent;
 		this.kids = Kids;
 		this.marriedTo = new String[] { MarriedTo };
 		this.kidammount = kidAmmount;
@@ -28,7 +29,7 @@ public class MarriedPlane extends PlanePonii {
 
 	}
 
-	public MarriedPlane(String Name, String AlternateName, String Flag, Boolean Gender, Boolean IsVamponii, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String[] MarriedTo, int kidAmmount, String[] Kids) {
+	public MarriedPlaneWithOtherKids(String Name, String AlternateName, String Flag, Boolean Gender, Boolean IsVamponii, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String[] MarriedTo, int kidAmmount, String[] Kids, String[] kidOtherParent) {
 		this.name = Name;
 		this.Gender = Gender;
 		this.description = "\nPlane" + Description;
@@ -39,6 +40,7 @@ public class MarriedPlane extends PlanePonii {
 		this.father = Father;
 		this.birthday = bday;
 
+		this.with = kidOtherParent;
 		this.kids = Kids;
 		this.marriedTo = MarriedTo;
 		this.kidammount = kidAmmount;
@@ -64,7 +66,7 @@ public class MarriedPlane extends PlanePonii {
 		if (kids.length != 0) {
 			kdz = kidammount + "\n";
 			for (int i = 0; i < kids.length; i++)
-				kdz = kdz + kids[i] + "\n";
+				kdz = kdz + "With : \t" + with[i] + ":\t" + kids[i] + "\n";
 		}
 		if (otherBoolean)
 			vpni = "\nIs a Vamponii";

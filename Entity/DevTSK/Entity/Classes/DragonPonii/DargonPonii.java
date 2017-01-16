@@ -1,4 +1,6 @@
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.DragonPonii;
+
+import DevTSK.Entity.Classes.Ponii.Ponii;
 
 public abstract class DargonPonii extends Ponii {
 
@@ -8,12 +10,5 @@ public abstract class DargonPonii extends Ponii {
 				+ "The more dragon-like ones don't have cutie marks while the more pony-like do.\n"
 				+ "Some have wings while others don't, along with fur or scales, horns, or a spike on the end of the tail.";
 
-	}
-
-	public String getGender() {
-		String s = "Stallion";
-		if (super.Gender)
-			s = "Mare";
-		return s;
 	}
 }

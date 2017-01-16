@@ -2,7 +2,9 @@
  * @author CosmosDarkstar
  **/
 
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.WerewolfPonii;
+
+import DevTSK.Entity.Classes.Ponii.Ponii;
 
 public abstract class WerewolfPonii extends Ponii {
 

@@ -2,7 +2,7 @@
  * @author CosmosDarkstar
  */
 
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.DragonPonii;
 
 import DevTSK.Util.Day;
 

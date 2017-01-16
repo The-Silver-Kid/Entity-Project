@@ -1,13 +1,14 @@
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.Carribou;
 
 import DevTSK.Util.Day;
 
-public class UnMarriedMachinePonii extends MachinePonii {
+public class UnMarriedCarribou extends VikingCarribou {
 
-	public UnMarriedMachinePonii(String Name, String AlternateName, String Flag, Boolean Gender, String Description, String Code, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage) {
+	public UnMarriedCarribou(String Name, String AlternateName, String Flag, Boolean Gender, Boolean IsVamponii, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage) {
 		this.name = Name;
 		this.Gender = Gender;
-		this.description = "\nRegular" + Description;
+		this.otherBoolean = IsVamponii;
+		this.description = "\nCarribou" + Description;
 		this.colour = ManeColour;
 		this.anotherColour = TailColour;
 		this.mother = Mother;
@@ -15,7 +16,7 @@ public class UnMarriedMachinePonii extends MachinePonii {
 		this.birthday = bday;
 		this.imagepath = Imagename;
 		this.altimagepath = CutiimarkImage;
-		this.additionalInfo = Code;
+		this.additionalInfo = CutiiMarkInfo;
 		this.altName = AlternateName;
 		this.flag = Flag;
 	}

@@ -1,6 +1,8 @@
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.Carribou;
 
-public abstract class VikingCarribou extends Entity {
+import DevTSK.Entity.Classes.Ponii.Ponii;
+
+public abstract class VikingCarribou extends Ponii {
 
 	@Override
 	public String getInfo() {

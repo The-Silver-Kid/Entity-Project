@@ -1,4 +1,4 @@
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.Ponii;
 
 import DevTSK.Util.Day;
 

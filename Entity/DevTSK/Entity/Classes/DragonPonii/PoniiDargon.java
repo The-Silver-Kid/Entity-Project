@@ -1,9 +1,8 @@
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.DragonPonii;
+
+import DevTSK.Entity.Classes.Ponii.Ponii;
 
 public abstract class PoniiDargon extends Ponii {
-
-	public PoniiDargon() {
-	}
 
 	@Override
 	public String getInfo() {

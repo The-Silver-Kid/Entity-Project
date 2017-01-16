@@ -1,4 +1,4 @@
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.Unknown;
 
 import DevTSK.Util.Day;
 

@@ -1,4 +1,6 @@
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.PlanePonii;
+
+import DevTSK.Entity.Classes.Ponii.Ponii;
 
 public abstract class PlanePonii extends Ponii {
 

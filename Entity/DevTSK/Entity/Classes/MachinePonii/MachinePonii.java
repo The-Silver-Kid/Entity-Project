@@ -1,4 +1,6 @@
-package DevTSK.Entity;
+package DevTSK.Entity.Classes.MachinePonii;
+
+import DevTSK.Entity.Entity;
 
 public abstract class MachinePonii extends Entity {
 
