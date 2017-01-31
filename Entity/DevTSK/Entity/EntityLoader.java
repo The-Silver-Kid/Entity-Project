@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import DAG.Config.ConfigException;
+import DevTSK.Util.Day;
 import DevTSK.Util.StringWriter;
 
 /**
@@ -19,6 +20,9 @@ public class EntityLoader {
 	// File("./config/MasterControl.poniiconfig.ini");
 	private static String lastCmd, name;
 	private static String[] sl;
+
+	@SuppressWarnings("unused")
+	private final Day compDay;
 
 	private static FileOutputStream send;
 
@@ -55,10 +59,13 @@ public class EntityLoader {
 	 *            OC Entity List
 	 * @param Entity[]
 	 *            Non-OC Entity List
+	 * @param Day
+	 *            Day used for comparison
 	 */
-	public EntityLoader(Entity[] o, Entity[] c) {
+	public EntityLoader(Entity[] o, Entity[] c, Day d) {
 		OC = o;
 		show = c;
+		compDay = d;
 	}
 
 	/**
@@ -418,6 +425,8 @@ public class EntityLoader {
 	 */
 	private void getInfo(Boolean b, int i) {
 		MasterControl.poni.printCl();
+
+		//TODO : Work off of compDay instead of a blank day.
 
 		if (b)
 			MasterControl.poni.println(OC[i].toString());
