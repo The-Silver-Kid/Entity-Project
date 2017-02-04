@@ -25,12 +25,12 @@ public class UnMarriedDargonPonii extends DargonPonii {
 	}
 
 	@Override
-	public String toString() {
+	public String toString(Day offset) {
 		String vpni = "";
 		if (otherBoolean)
 			vpni = "\nIs a Vamponii";
 		String s = "Name : " + name + " AKA " + altName +
-				"\nAge : " + new Day().yearsFrom(birthday) +
+				"\nAge : " + offset.yearsFrom(birthday) +
 				"\n\n" + super.getGender() +
 				"\n\n" + description + vpni +
 				"\nMane : " + colour + "\nTail : " + anotherColour +

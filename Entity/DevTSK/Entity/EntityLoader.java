@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import DAG.Config.ConfigException;
 import DevTSK.Util.Day;
 import DevTSK.Util.StringWriter;
+import DevTSK.Util.DAG.ConfigException;
 
 /**
  * @author The_Silver_Kid
@@ -21,7 +21,6 @@ public class EntityLoader {
 	private static String lastCmd, name;
 	private static String[] sl;
 
-	@SuppressWarnings("unused")
 	private final Day compDay;
 
 	private static FileOutputStream send;
@@ -426,12 +425,10 @@ public class EntityLoader {
 	private void getInfo(Boolean b, int i) {
 		MasterControl.poni.printCl();
 
-		//TODO : Work off of compDay instead of a blank day.
-
 		if (b)
-			MasterControl.poni.println(OC[i].toString());
+			MasterControl.poni.println(OC[i].toString(compDay));
 		if (!b)
-			MasterControl.poni.println(show[i].toString());
+			MasterControl.poni.println(show[i].toString(compDay));
 
 		if (b)
 			try {

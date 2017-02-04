@@ -4,14 +4,14 @@ import DevTSK.Util.Day;
 
 public class MarriedQuilava extends Quilava {
 
-	public MarriedQuilava(String Name, String AlternateName, Boolean Gender, Boolean Shiny, String Description, String oTrainer, String Trainer, Day CaptureDate, String Imagename, String PokeballTypeImage, String marriedTo, int ammountOfKids, String[] kidNames) {
+	public MarriedQuilava(String Name, String AlternateName, Boolean Gender, Boolean Shiny, String Description, String oTrainer, String Trainer, Day CaptureDate, String Imagename, String PokeballTypeImage, String marriedTo, String[] kidNames) {
 		this.name = Name;
 		this.Gender = Gender;
 		this.description = "\nRegular" + Description;
 		this.father = Trainer;
 		this.birthday = CaptureDate;
 		this.marriedTo = new String[] { marriedTo };
-		this.kidammount = ammountOfKids;
+		this.kidammount = kidNames.length;
 		this.kids = kidNames;
 
 		this.mother = oTrainer;
@@ -21,14 +21,14 @@ public class MarriedQuilava extends Quilava {
 		this.altName = AlternateName;
 	}
 
-	public MarriedQuilava(String Name, String AlternateName, Boolean Gender, Boolean Shiny, String Description, String oTrainer, String Trainer, Day CaptureDate, String Imagename, String PokeballTypeImage, String marriedTo[], int ammountOfKids, String[] kidNames) {
+	public MarriedQuilava(String Name, String AlternateName, Boolean Gender, Boolean Shiny, String Description, String oTrainer, String Trainer, Day CaptureDate, String Imagename, String PokeballTypeImage, String marriedTo[], String[] kidNames) {
 		this.name = Name;
 		this.Gender = Gender;
 		this.description = "\nRegular" + Description;
 		this.father = Trainer;
 		this.birthday = CaptureDate;
 		this.marriedTo = marriedTo;
-		this.kidammount = ammountOfKids;
+		this.kidammount = kidNames.length;
 		this.kids = kidNames;
 
 		this.mother = oTrainer;
@@ -39,7 +39,7 @@ public class MarriedQuilava extends Quilava {
 	}
 
 	@Override
-	public String toString() {
+	public String toString(Day offset) {
 		String vpni = "", partnrs = "", kdz = "None";
 		for (int i = 0; i < marriedTo.length; i++)
 			if (i == 0) {

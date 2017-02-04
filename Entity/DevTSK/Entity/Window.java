@@ -20,9 +20,9 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import DAG.Config.Config;
-import DAG.Config.ConfigException;
 import DevTSK.Util.FileDetect;
+import DevTSK.Util.DAG.Config;
+import DevTSK.Util.DAG.ConfigException;
 
 /**
  * Draws the window and receives text to put in the output boxes
@@ -312,7 +312,7 @@ public class Window {
 		if (new Config("./PoniiConfig.cfg").getDouble("version") < 2.0) {
 			printCl();
 			println("If you are seeing this something went wrong"
-					+ "\nIt is probably my fault... open a bug on github.");
+					+ "\nIt is probably my fault... open a bug on Github.");
 		}
 	}
 

@@ -4,7 +4,7 @@ import DevTSK.Util.Day;
 
 public class MarriedPlane extends PlanePonii {
 
-	public MarriedPlane(String Name, String AlternateName, String Flag, Boolean Gender, Boolean IsVamponii, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String MarriedTo, int kidAmmount, String[] Kids) {
+	public MarriedPlane(String Name, String AlternateName, String Flag, Boolean Gender, Boolean IsVamponii, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String MarriedTo, String[] Kids) {
 		this.name = Name;
 		this.Gender = Gender;
 		this.description = "\nPlane" + Description;
@@ -17,7 +17,7 @@ public class MarriedPlane extends PlanePonii {
 
 		this.kids = Kids;
 		this.marriedTo = new String[] { MarriedTo };
-		this.kidammount = kidAmmount;
+		this.kidammount = Kids.length;
 
 		this.imagepath = Imagename;
 		this.altimagepath = CutiimarkImage;
@@ -28,7 +28,7 @@ public class MarriedPlane extends PlanePonii {
 
 	}
 
-	public MarriedPlane(String Name, String AlternateName, String Flag, Boolean Gender, Boolean IsVamponii, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String[] MarriedTo, int kidAmmount, String[] Kids) {
+	public MarriedPlane(String Name, String AlternateName, String Flag, Boolean Gender, Boolean IsVamponii, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String[] MarriedTo, String[] Kids) {
 		this.name = Name;
 		this.Gender = Gender;
 		this.description = "\nPlane" + Description;
@@ -41,7 +41,7 @@ public class MarriedPlane extends PlanePonii {
 
 		this.kids = Kids;
 		this.marriedTo = MarriedTo;
-		this.kidammount = kidAmmount;
+		this.kidammount = Kids.length;
 
 		this.imagepath = Imagename;
 		this.altimagepath = CutiimarkImage;
@@ -53,7 +53,7 @@ public class MarriedPlane extends PlanePonii {
 	}
 
 	@Override
-	public String toString() {
+	public String toString(Day offset) {
 		String vpni = "", partnrs = "", kdz = "None";
 		for (int i = 0; i < marriedTo.length; i++)
 			if (i == 0) {
@@ -69,7 +69,7 @@ public class MarriedPlane extends PlanePonii {
 		if (otherBoolean)
 			vpni = "\nIs a Vamponii";
 		String s = "Name : " + name + " AKA " + altName +
-				"\nAge : " + new Day().yearsFrom(birthday) +
+				"\nAge : " + offset.yearsFrom(birthday) +
 				"\n\n" + super.getGender() +
 				"\n\n" + description + vpni +
 				"\nMane : " + colour + "\nTail : " + anotherColour +

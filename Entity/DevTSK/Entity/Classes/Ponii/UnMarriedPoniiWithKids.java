@@ -4,7 +4,7 @@ import DevTSK.Util.Day;
 
 public class UnMarriedPoniiWithKids extends Ponii {
 
-	public UnMarriedPoniiWithKids(String Name, String AlternateName, String Flag, Boolean Gender, Boolean IsVamponii, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, int ammountOfKids, String[] kidNames, String[] kidOtherParent) {
+	public UnMarriedPoniiWithKids(String Name, String AlternateName, String Flag, Boolean Gender, Boolean IsVamponii, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String[] kidNames, String[] kidOtherParent) {
 		this.name = Name;
 		this.Gender = Gender;
 		this.description = "\nRegular" + Description;
@@ -17,7 +17,7 @@ public class UnMarriedPoniiWithKids extends Ponii {
 
 		this.imagepath = Imagename;
 		this.altimagepath = CutiimarkImage;
-		this.kidammount = ammountOfKids;
+		this.kidammount = kidNames.length;
 		this.kids = kidNames;
 		this.with = kidOtherParent;
 		this.additionalInfo = CutiiMarkInfo;
@@ -27,7 +27,7 @@ public class UnMarriedPoniiWithKids extends Ponii {
 	}
 
 	@Override
-	public String toString() {
+	public String toString(Day offset) {
 		String vpni = "", kdz = "None";
 		if (kids.length != 0) {
 			kdz = kidammount + "\n";
@@ -37,7 +37,7 @@ public class UnMarriedPoniiWithKids extends Ponii {
 		if (otherBoolean)
 			vpni = "\nIs a Vamponii";
 		String s = "Name : " + name + " AKA " + altName +
-				"\nAge : " + new Day().yearsFrom(birthday) +
+				"\nAge : " + offset.yearsFrom(birthday) +
 				"\n\n" + super.getGender() +
 				"\n\n" + description + vpni +
 				"\nMane : " + colour + "\nTail : " + anotherColour +

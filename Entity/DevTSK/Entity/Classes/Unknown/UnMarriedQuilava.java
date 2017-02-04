@@ -19,7 +19,7 @@ public class UnMarriedQuilava extends Quilava {
 	}
 
 	@Override
-	public String toString() {
+	public String toString(Day offset) {
 		String vpni = "";
 		if (otherBoolean)
 			vpni = "\nShiny";

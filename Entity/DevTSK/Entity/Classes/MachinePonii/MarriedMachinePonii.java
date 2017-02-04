@@ -4,7 +4,7 @@ import DevTSK.Util.Day;
 
 public class MarriedMachinePonii extends MachinePonii {
 
-	public MarriedMachinePonii(String Name, String AlternateName, String Flag, Boolean Gender, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String MarriedTo, int ammountOfKids, String[] kidNames) {
+	public MarriedMachinePonii(String Name, String AlternateName, String Flag, Boolean Gender, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String MarriedTo, String[] kidNames) {
 		this.name = Name;
 		this.Gender = Gender;
 		this.description = "\nRegular" + Description;
@@ -15,7 +15,7 @@ public class MarriedMachinePonii extends MachinePonii {
 		this.birthday = bday;
 		this.imagepath = Imagename;
 		this.altimagepath = CutiimarkImage;
-		this.kidammount = ammountOfKids;
+		this.kidammount = kidNames.length;
 		this.kids = kidNames;
 		this.marriedTo = new String[] { MarriedTo };
 		this.additionalInfo = CutiiMarkInfo;
@@ -23,7 +23,7 @@ public class MarriedMachinePonii extends MachinePonii {
 		this.flag = Flag;
 	}
 
-	public MarriedMachinePonii(String Name, String AlternateName, String Flag, Boolean Gender, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String[] MarriedTo, int ammountOfKids, String[] kidNames) {
+	public MarriedMachinePonii(String Name, String AlternateName, String Flag, Boolean Gender, String Description, String CutiiMarkInfo, String ManeColour, String TailColour, String Mother, String Father, Day bday, String Imagename, String CutiimarkImage, String[] MarriedTo, String[] kidNames) {
 		this.name = Name;
 		this.Gender = Gender;
 		this.description = "\nRegular" + Description;
@@ -34,7 +34,7 @@ public class MarriedMachinePonii extends MachinePonii {
 		this.birthday = bday;
 		this.imagepath = Imagename;
 		this.altimagepath = CutiimarkImage;
-		this.kidammount = ammountOfKids;
+		this.kidammount = kidNames.length;
 		this.kids = kidNames;
 		this.marriedTo = MarriedTo;
 		this.additionalInfo = CutiiMarkInfo;
@@ -43,7 +43,7 @@ public class MarriedMachinePonii extends MachinePonii {
 	}
 
 	@Override
-	public String toString() {
+	public String toString(Day offset) {
 		String vpni = "", partnrs = "", kdz = "None";
 		for (int i = 0; i < marriedTo.length; i++)
 			if (i == 0) {
@@ -59,7 +59,7 @@ public class MarriedMachinePonii extends MachinePonii {
 		if (otherBoolean)
 			vpni = "\nIs a Vamponii";
 		String s = "Name : " + name + " AKA " + altName +
-				"\nAge : " + new Day().yearsFrom(birthday) +
+				"\nAge : " + offset.yearsFrom(birthday) +
 				"\n\n" + super.getGender() +
 				"\n\n" + description + vpni +
 				"\nMane : " + colour + "\nTail : " + anotherColour +

@@ -10,7 +10,7 @@ public abstract class Entity {
 	protected String[] kids = null, with = null, marriedTo = null;
 	protected Day birthday;
 
-	public abstract String toString();
+	public abstract String toString(Day offset);
 
 	public String getGender() {
 		if (Gender) {
