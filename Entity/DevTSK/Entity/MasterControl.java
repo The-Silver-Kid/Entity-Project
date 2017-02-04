@@ -75,6 +75,8 @@ public class MasterControl {
 							new String[] { "Morgan" }),
 					new UnMarriedPonii("Morgan Shuttleknight", "Emi", "", true, false, "\nPegasus\nWIP", "\nWIP", "WIP", "WIP", "Blitz", "Steven", new Day(5, 3, 2017), "null.png", "null.png"),
 
+					//TODO : Another kid for blitz
+
 					//TODO : Krystla Frostia
 					//new UnMarriedPonii("Thorn Radon", "Thorn", "", true, false, "\nUnicorn\nSixth Ponii on the AJ-Radon Line.\n.WIP", "\nWIP", "WIP", "WIP", "Apple Jack", "Shadow Radon", new Day(20, 01, 2018), "null.png", "null.png"),
 
@@ -126,6 +128,7 @@ public class MasterControl {
 					new UnMarriedPonii("Agent V42666J", "Octave", "", true, false, "\nRefer to Nova.png for outfit and weapon\nPegasus\nMember of group of elite assassins known as Ghosts\nOctave is pronounced with a hard A sound", "Targeting reticle", "Silver", "Silver", "REDACTED", "REDACTED", new Day(5, 1, 1995), "null.png", "null.png"),
 
 					// ALT versions here
+					// from ALT universe or something...
 					new MarriedPonii("Shade Radon", "Shade", "", false, true, "\nUnicorn\nJust like Radon but without the yellow markings", "\nBlack Thundercloud with a yellow thunderbolt coming from it", "Yellow and Black", "Yellow and Black", "Karrie", "Slaider", new Day(20, 7, 1993), "null.png", "kloud.png", "Apple Jack (Earth 2)" /*for lack of better name*/,
 							new String[] { "Lighting Apple", "Shade Jack", "Sno", "Xander", "Dai", "Roze", "Powder" })
 									.addDNA(new DNA("2S2S000200000000FFFF0000000FFFF00UN1837204020000N1000000FFFF000L107F3FCC004CB2")),
