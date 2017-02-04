@@ -112,10 +112,6 @@ public class MasterControl {
 							new String[] { "Morgan" }),
 					new UnMarriedPlane("Morgan Stratoliner", "Morgan", "✈", true, true, "\n...bff\nWIP", "\nMissile and a aeroplane", "N/A", "N/A", "Belle", "Boewing", new Day(), "null.png", "null.png"),
 
-					//TODO : Earth 2 Radon
-					//new MarriedPoniiWithOtherKids("Shadow Radon (Earth 2)", "Radon2", "", false, true, "\nUnicorn\n", "\nBlack Thundercloud with a yellow thunderbolt coming from it", "Yellow and Black", "Yellow and Black", "Charrie", "Slanger", new Day(20, 7, 1993), "Radon.png", "kloud.png", new String[] { "Apple Jack", "Galecia Frostia" }, 3, new String[] { "Tree Lighting", "Shadow Jack", "Powder" }, new String[] { "Apple Jack", "Apple Jack", "Galecia Frostia" })
-					//		.addDNA(new DNA("2S2S000200000000FFFF0000000FFFF00UN1837204020000N1000000FFFF000L107F3FCC004CB2")),
-
 					new UnMarriedPonii("Cosmos Darkstar", "Cosmos", "", false, true, "\nZebra pegasus\nIs half demon\nLives in the old castle in Everfree", "\nPentagram", "Purple with gray stripes", "Gray", "Nightmare Moon", "King of Hell", new Day(21, 8, 1164), "null.png", "null.png")
 							.addDNA(new DNA("3B240J41004E4E4E6B6B6B02000B49600UN1837205030001Q05F6366FF7FFF00107F3FCC004CB2")),
 
@@ -128,6 +124,11 @@ public class MasterControl {
 
 					/* You suddenly realize that no one can see 'Nova.png' as it is not the entity image, and is compiled into the JAR witch no one will ever open with anything other then Java.*/
 					new UnMarriedPonii("Agent V42666J", "Octave", "", true, false, "\nRefer to Nova.png for outfit and weapon\nPegasus\nMember of group of elite assassins known as Ghosts\nOctave is pronounced with a hard A sound", "Targeting reticle", "Silver", "Silver", "REDACTED", "REDACTED", new Day(5, 1, 1995), "null.png", "null.png"),
+
+					// ALT versions here
+					new MarriedPonii("Shade Radon", "Shade", "", false, true, "\nUnicorn\nJust like Radon but without the yellow markings", "\nBlack Thundercloud with a yellow thunderbolt coming from it", "Yellow and Black", "Yellow and Black", "Karrie", "Slaider", new Day(20, 7, 1993), "null.png", "kloud.png", "Apple Jack (Earth 2)" /*for lack of better name*/,
+							new String[] { "Lighting Apple", "Shade Jack", "Sno", "Xander", "Dai", "Roze", "Powder" })
+									.addDNA(new DNA("2S2S000200000000FFFF0000000FFFF00UN1837204020000N1000000FFFF000L107F3FCC004CB2")),
 
 			}, new Entity[] {
 					new MarriedPonii("Apple Jack Radon", "AJ", "", true, false, "\nEarth\nIts Apple Jack... y'all know her", "\nThree red apples", "Pale Yellow", "Pale Yellow", "?", "?", new Day(3, 4, 1993), "AJ.png", "AJMark.png", "Shadow Radon",
