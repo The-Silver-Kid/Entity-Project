@@ -41,12 +41,10 @@ public class EntityLoader {
 			"Dumps a list of all ponii-position numbers into EntityList.txt",
 			"Dumps a list of all entitiis that have WIP as one or more values" };
 
-	//TODO : wip function
-
 	private static final String[] commands = new String[] { "Colour", "Color", "InputColour", "InputColor",
 			"OutputColour", "OutputColor", "Exit", "OutputTextColor", "InputTextColor", "OutputTextColour",
 			"InputTextColour", "errorcheck", "extract", "breed", "last", "l", "lastcmd", "cfg", "config", "listNonOC",
-			"listall", "listalldna", "info", "charset", "switchcharset", "help", "dump" };
+			"listall", "listalldna", "info", "charset", "switchcharset", "help", "dump", "wip" };
 
 	private static final String[] modes = new String[] { "0", "1", "2" };
 
@@ -282,17 +280,17 @@ public class EntityLoader {
 			if (sl[0].equalsIgnoreCase("listall")) {
 				MasterControl.poni.println("Acceptable OC/NonOC Ponii Names: " + (OC.length + show.length));
 				for (int i = 0; i < OC.length; i++) {
-					MasterControl.poni.println(OC[i].getName() + " AKA " + OC[i].getAltName());
+					MasterControl.poni.println(OC[i].getName() + "\tAKA\t" + OC[i].getAltName());
 				}
 				for (int i = 0; i < show.length; i++) {
-					MasterControl.poni.println(show[i].getName() + " AKA " + show[i].getAltName());
+					MasterControl.poni.println(show[i].getName() + "\tAKA\t" + show[i].getAltName());
 				}
 			} else if (sl[0].equalsIgnoreCase("listalldna")) {
 				MasterControl.poni.println("OC/NonOC Poniis with DNA: ");
 				for (int i = 0; i < OC.length; i++) {
 					try {
 						if (OC[i].getDNA() != null)
-							MasterControl.poni.println(OC[i].getName() + " AKA " + OC[i].getAltName());
+							MasterControl.poni.println(OC[i].getName() + "\tAKA\t" + OC[i].getAltName());
 					} catch (Exception e) {
 						System.out.println("No DNA found for " + OC[i].getName());
 					}
@@ -301,7 +299,7 @@ public class EntityLoader {
 				for (int i = 0; i < show.length; i++) {
 					try {
 						if (show[i].getDNA() != null)
-							MasterControl.poni.println(show[i].getName() + " AKA " + show[i].getAltName());
+							MasterControl.poni.println(show[i].getName() + "\tAKA\t" + show[i].getAltName());
 					} catch (Exception e) {
 						System.out.println("No DNA found for " + show[i].getName());
 					}
@@ -310,7 +308,7 @@ public class EntityLoader {
 			} else {
 				MasterControl.poni.println("Acceptable NonOC Ponii Names: " + show.length);
 				for (int i = 0; i < show.length; i++) {
-					MasterControl.poni.println(show[i].getName() + " AKA " + show[i].getAltName());
+					MasterControl.poni.println(show[i].getName() + "\tAKA\t" + show[i].getAltName());
 				}
 			}
 		}
@@ -412,6 +410,37 @@ public class EntityLoader {
 			MasterControl.poni.printCl();
 			MasterControl.poni.println(og);
 		}
+		if (sl[0].equalsIgnoreCase("WIP")) {
+			String WIPEntitiis = "Entitiis that need work done:\n",
+					noImage = "1 = No Alternate Image\n2 = No Main Image\n3 = No images\nEntitiis that have no image:\n",
+					noDNA = "Entitiis without DNA:\n";
+			for (int i = 0; i < OC.length; i++) {
+				String temp = OC[i].toString(compDay);
+				int g = 0;
+				if (temp.contains("WIP"))
+					WIPEntitiis = WIPEntitiis + i + " : " + OC[i].getAltName() + "\n";
+				if (OC[i].imagepath.equalsIgnoreCase("null.png"))
+					g += 2;
+				if (OC[i].altimagepath.equalsIgnoreCase("null.png"))
+					g += 1;
+				if (g != 0)
+					noImage = noImage + i + " : " + OC[i].getAltName() + " " + g + "\n";
+				if (OC[i].getDNA().toString().equalsIgnoreCase("Empty"))
+					noDNA = noDNA + i + " : " + OC[i].getAltName() + "\n";
+			}
+			WIPEntitiis = WIPEntitiis + "\n" + noImage + "\n" + noDNA;
+
+			String og = "Success!";
+
+			StringWriter sw = new StringWriter();
+			try {
+				sw.Write(WIPEntitiis, "WIPList.txt", true);
+			} catch (Exception e) {
+				og = "Failure.";
+			}
+			MasterControl.poni.printCl();
+			MasterControl.poni.println(og);
+		}
 	}
 
 	/**
@@ -460,7 +489,7 @@ public class EntityLoader {
 		String XD = "Acceptable Ponii names : " + OC.length;
 		MasterControl.poni.printCl();
 		for (int i = 0; i < OC.length; i++) {
-			XD = XD + "\n" + OC[i].getName() + " AKA " + OC[i].getAltName();
+			XD = XD + "\n" + OC[i].getName() + "\tAKA\t" + OC[i].getAltName();
 		}
 		XD = XD + "\nFor Command help put Help into the box.";
 		return XD;

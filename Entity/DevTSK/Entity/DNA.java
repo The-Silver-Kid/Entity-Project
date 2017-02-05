@@ -15,6 +15,10 @@ public class DNA {
 			full = s;
 	}
 
+	public DNA() {
+		full = "Empty";
+	}
+
 	public String getDNA() {
 		return full;
 	}
