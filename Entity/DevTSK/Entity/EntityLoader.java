@@ -16,8 +16,7 @@ import DevTSK.Util.DAG.ConfigException;
  *         Handles all input and output.
  */
 public class EntityLoader {
-	// private static final File f = new
-	// File("./config/MasterControl.poniiconfig.ini");
+	// private static final File f = new File("./config/MasterControl.poniiconfig.ini");
 	private static String lastCmd, name;
 	private static String[] sl;
 
@@ -29,7 +28,7 @@ public class EntityLoader {
 			"OutputColor <R> <G> <B>", "OutputTextColor <R> <G> <B>", "InputTextColor <R> <G> <B>", "Exit",
 			"extract [Entity name]", "breed <Mother> <Father> (broken)", "last / l / lastcmd", "cfg / config",
 			"listNonOC", "listall", "listalldna", "info <entity name>", "charset",
-			"switchcharset <Charset String Identifyer>", "dump" };
+			"switchcharset <Charset String Identifyer>", "dump (developer only!)", "wip (developer only!)" };
 
 	private static final String[] commandexpl = new String[] { "Changes Background Color", "Changes input box color",
 			"Changes outputbox color", "Changes outputbox text color", "Changes input box text color",
@@ -39,7 +38,10 @@ public class EntityLoader {
 			"saves color scheme to config file : Poniconfig.cfg", "lists all defined OC entities",
 			"lists all defined entities", "lists all entities with dna input", "gives general on the given entity type",
 			"prints to console the current entity list String Identifyer", "switches the entity list",
-			"Dumps a list of all ponii-position numbers into EntityList.txt" };
+			"Dumps a list of all ponii-position numbers into EntityList.txt",
+			"Dumps a list of all entitiis that have WIP as one or more values" };
+
+	//TODO : wip function
 
 	private static final String[] commands = new String[] { "Colour", "Color", "InputColour", "InputColor",
 			"OutputColour", "OutputColor", "Exit", "OutputTextColor", "InputTextColor", "OutputTextColour",
