@@ -48,6 +48,8 @@ public class Window {
 	/**
 	 * Sets up the windows based on various input variables and configuration.
 	 * 
+	 * @param p
+	 * 
 	 * @param String
 	 *            Title
 	 * @param int

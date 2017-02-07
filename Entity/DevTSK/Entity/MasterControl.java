@@ -18,6 +18,7 @@ import DevTSK.Entity.Classes.Ponii.UnMarriedPoniiWithKids;
 import DevTSK.Entity.Classes.Unknown.MarriedQuilava;
 import DevTSK.Entity.Classes.Unknown.UnMarriedQuilava;
 import DevTSK.Util.Day;
+import DevTSK.Util.LoggerPro;
 import DevTSK.Util.DAG.ConfigException;
 
 /**
@@ -31,6 +32,8 @@ public class MasterControl {
 	public static String charsetname = "null";
 	public static Window poni;
 	public static Day compDay;
+
+	private static LoggerPro p = new LoggerPro(new String[] { "-", "#", "X" }, LoggerPro.FILE_AND_CONSOLE);
 
 	/**
 	 * Main Function
@@ -141,7 +144,7 @@ public class MasterControl {
 					new UnMarriedPonii("Nurse RedHeart", "RedHeart", "", true, false, "\nEarth\nShe's a nurse.", "\nRed cross with hearts", "Light pink", "Light pink", "?", "?", new Day(9, 8, 1982), "null.png", "null.png"),
 
 					new UnMarriedPonii("Princess Cadence", "Cadence", "", true, false, "\nAlicorn\nPretty pink ponii princess", "\nCrystal Heart", "Pink as can be", "Yellow, purple, and pink", "Queen Galaxia", "Unknown", new Day(16, 6, -9474), "null.png", "null.png"),
-			}, compDay);
+			}, compDay, p);
 
 		}
 		/*
@@ -156,7 +159,7 @@ public class MasterControl {
 						//oc
 				}, new Entity[] {
 						//non-oc
-				}, compDay);
+				}, compDay, p);
 			}
 			/* CODES
 			 * Snowfall: 3K24006010CCCCCCFFFFFF022010092BBUN1837000200000800040FFFF7FFF0B107F3FCC004CB2
@@ -194,7 +197,7 @@ public class MasterControl {
 				}, new Entity[] {
 						new MarriedPonii("Apple Jack Radon", "AJ", "", true, false, "\nEarth\nIts Apple Jack... y'all know her", "\nThree red apples", "Pale Yellow", "Pale Yellow", "?", "?", new Day(3, 4, 1993), "AJ.png", "AJMark.png", "Shadow Radon", new String[] { "Tree Lightning", "Shadow Jack", "Rhyne", "Aaron", "Powder", "Thorn", "Nhyte", "?", }),
 						new UnMarriedPoniiWithKids("Nurse RedHeart", "RedHeart", "", true, false, "\nEarth\nShe's a nurse.", "\nRed cross with hearts", "Light pink", "Light pink", "?", "?", new Day(9, 8, 1982), "null.png", "null.png", new String[] { "Maven" }, new String[] { "Unknown" }),
-				}, compDay);
+				}, compDay, p);
 			}
 			if (args[0].equalsIgnoreCase("Equestria3")) {
 				charsetname = "Equestria3";
@@ -212,14 +215,13 @@ public class MasterControl {
 						new MarriedPonii("Lieutenant Shuttleknight", "Steven", "", false, false, "\nPegasus\nLieutenant for the Royal Guard", "\nWIP", "", "", "Speedometere", "Altaspecter", new Day(28, 2, 1998), "steven.png", "null.png", "Jet Radium", new String[] {}),
 				}, new Entity[] {
 
-				}, compDay);
+				}, compDay, p);
 			}
 		}
 		if (h == null) {
 			JOptionPane.showMessageDialog(null, "OH NOES!\nThe charset '" + args[0] + "' has not been setup yet!\n\nSystem will now exit.");
 			System.exit(1);
 		}
-		System.out.println("Setting date to : " + compDay.toString());
 		poni = new Window("Ponii Program 4.0", 1, 0, 0, 0, h);
 		poni.punch();
 		//poni.setupConfig();

@@ -21,10 +21,10 @@ public class Breeder {
 		f = Father.getDNA();
 
 		if (m.equals(null) || f.equals(null)) {
-			return Mother.getName() + " and " + Father.getName()
+			return "Error : " + Mother.getName() + " and " + Father.getName()
 					+ " did not want to have kids. (Some pony is missing DNA)";
 		} else if (m.equals("") || f.equals("")) {
-			return Mother.getName() + " and " + Father.getName()
+			return "Error : " + Mother.getName() + " and " + Father.getName()
 					+ " did not want to have kids. (Some pony has void DNA)";
 		} else {
 			switch (mode) {
