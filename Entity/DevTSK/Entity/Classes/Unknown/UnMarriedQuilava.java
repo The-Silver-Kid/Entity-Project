@@ -24,7 +24,7 @@ public class UnMarriedQuilava extends Quilava {
 		if (otherBoolean)
 			vpni = "\nShiny";
 		String s = "Name : " + name + " AKA " + altName +
-				"\nCaptured : " + birthday.toString() +
+				"\nCaptured : " + birthday.toString(true) +
 				"\n\n" + super.getGender() +
 				"\n\n" + description + vpni +
 				"\n\nOriginal Trainer : " + mother + "\nTrainer : " + father +
