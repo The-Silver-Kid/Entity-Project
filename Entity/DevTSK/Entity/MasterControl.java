@@ -222,7 +222,7 @@ public class MasterControl {
 			JOptionPane.showMessageDialog(null, "OH NOES!\nThe charset '" + args[0] + "' has not been setup yet!\n\nSystem will now exit.");
 			System.exit(1);
 		}
-		poni = new Window("Ponii Program 4.0", 1, 0, 0, 0, h);
+		poni = new Window("Ponii Program 4.0", 1, 0, 0, 0, h, p);
 		poni.punch();
 		//poni.setupConfig();
 		//poni.punch();

@@ -21,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import DevTSK.Util.FileDetect;
+import DevTSK.Util.LoggerPro;
 import DevTSK.Util.DAG.Config;
 import DevTSK.Util.DAG.ConfigException;
 
@@ -45,6 +46,8 @@ public class Window {
 
 	public EntityLoader el;
 
+	private LoggerPro p;
+
 	/**
 	 * Sets up the windows based on various input variables and configuration.
 	 * 
@@ -65,9 +68,11 @@ public class Window {
 	 * @throws ConfigException
 	 * @throws IOException
 	 */
-	public Window(String n, int close, int x, int y, int CharRPWin, EntityLoader h) throws ConfigException, IOException {
+	public Window(String n, int close, int x, int y, int CharRPWin, EntityLoader h, LoggerPro p) throws ConfigException, IOException {
 
 		el = h;
+
+		this.p = p;
 
 		if (CharRPWin == 0) {
 
@@ -201,6 +206,7 @@ public class Window {
 		}
 		setupConfig();
 		punch();
+		this.p.log("Window Constructed.");
 	}
 
 	/**
@@ -314,7 +320,7 @@ public class Window {
 		if (new Config("./PoniiConfig.cfg").getDouble("version") < 2.0) {
 			printCl();
 			println("If you are seeing this something went wrong"
-					+ "\nIt is probably my fault... open a bug on Github.");
+					+ "\nIt is probably my fault...");
 		}
 	}
 
@@ -326,6 +332,7 @@ public class Window {
 	 * @throws IOException
 	 */
 	public void setupConfig() throws ConfigException, IOException {
+		p.log("Setting up window configuration.");
 		FileDetect fd = new FileDetect("./PoniiConfig.cfg");
 
 		if (!fd.Detect())
@@ -444,5 +451,7 @@ public class Window {
 		in.setAction(action);
 		frmPoniiPicCont.getRootPane().setDefaultButton(in);
 		frmPoniiPicCont.getContentPane().add(in);
+
+		p.log("Window is split.");
 	}
 }

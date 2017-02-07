@@ -153,8 +153,11 @@ public class EntityLoader {
 		String cmd = s;
 		String[] sl = cmd.split("\\s+");
 		this.logbook.log("Attempting execution of command : " + sl[0]);
-		if (sl[0].equalsIgnoreCase("Exit"))
+		if (sl[0].equalsIgnoreCase("Exit")) {
+			this.logbook.log(1, "System is shutting down!");
+			this.logbook.killStream();
 			System.exit(0);
+		}
 		if (sl[0].equalsIgnoreCase("ErrorCheck")) {
 			System.out.println("Stub command");
 		}
