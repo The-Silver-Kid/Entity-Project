@@ -138,7 +138,7 @@ public class MasterControl {
 
 			}, new Entity[] {
 					new MarriedPonii("Apple Jack Radon", "AJ", "", true, false, "\nEarth\nIts Apple Jack... y'all know her", "\nThree red apples", "Pale Yellow", "Pale Yellow", "?", "?", new Day(3, 4, 1993), "AJ.png", "AJMark.png", "Shadow Radon",
-							new String[] { "Tree Lighting", "Shadow Jack", "Rhyne", "Aaron", "Nhyte", "Thorn", "Powder" })
+							new String[] { "Tree Lighting", "Shadow Jack", "Rhyne", "Aaron", "Nhyte", "Thorn" })
 									.addDNA(new DNA("2S2S000000FEA100FEB19E0040110BF00UN1837000100000I0FAFE73FF7FFF0H107F3FCC004CB2")),
 
 					new UnMarriedPonii("Nurse RedHeart", "RedHeart", "", true, false, "\nEarth\nShe's a nurse.", "\nRed cross with hearts", "Light pink", "Light pink", "?", "?", new Day(9, 8, 1982), "null.png", "null.png"),
