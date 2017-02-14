@@ -29,7 +29,7 @@ public class EntityLoader {
 			"OutputColor <R> <G> <B>", "OutputTextColor <R> <G> <B>", "InputTextColor <R> <G> <B>", "Exit",
 			"extract [Entity name]", "breed <Mother> <Father> (broken)", "last / l / lastcmd", "cfg / config",
 			"listNonOC", "listall", "listalldna", "info <entity name>", "charset",
-			"switchcharset <Charset String Identifier>", "dump (developer only!)", "WIP (developer only!)" };
+			"dump (developer only!)", "WIP (developer only!)" };
 
 	private static final String[] commandexpl = new String[] { "Changes Background Color", "Changes input box color",
 			"Changes outputbox color", "Changes outputbox text color", "Changes input box text color",
@@ -38,14 +38,14 @@ public class EntityLoader {
 			"re-inputs last given command into the input box for editing or re-execution",
 			"saves color scheme to config file : Poniconfig.cfg", "lists all defined OC entities",
 			"lists all defined entities", "lists all entities with DNA input", "gives general on the given entity type",
-			"prints to console the current entity list String Identifier", "switches the entity list",
+			"prints to console the current entity list String Identifier",
 			"Dumps a list of all ponii-position numbers into EntityList.txt",
 			"Dumps a list of all entities that have WIP as one or more values" };
 
 	private static final String[] commands = new String[] { "Colour", "Color", "InputColour", "InputColor",
 			"OutputColour", "OutputColor", "Exit", "OutputTextColor", "InputTextColor", "OutputTextColour",
 			"InputTextColour", "errorcheck", "extract", "breed", "last", "l", "lastcmd", "cfg", "config", "listNonOC",
-			"listall", "listalldna", "info", "charset", "switchcharset", "help", "dump", "wip" };
+			"listall", "listalldna", "info", "charset", "help", "dump", "wip" };
 
 	private static final String[] modes = new String[] { "0", "1", "2" };
 
@@ -447,28 +447,6 @@ public class EntityLoader {
 			MasterControl.poni.printCl();
 			MasterControl.poni.println(name);
 			this.logbook.log("Command " + sl[0] + " completed successfully.");
-		}
-		if (sl[0].equalsIgnoreCase("switchcharset")) {
-			if (sl.length > 1) {
-				System.out.println(sl[1]);
-				try {
-					MasterControl.main(new String[] { sl[1] });
-				} catch (IOException | ConfigException e) {
-					this.logbook.log(2, "The system encountered an irrecoverable fault. System will now exit.");
-					this.logbook.log(2, "Caused by command " + sl[0]);
-					this.logbook.log(2, e.getMessage());
-					this.logbook.log(2, e.toString());
-					e.printStackTrace();
-					this.logbook.killStream();
-					System.exit(1);
-				} finally {
-					this.logbook.log(1, "Command " + sl[0] + " may or may not have completed successfully.");
-				}
-			} else {
-				MasterControl.poni.printCl();
-				MasterControl.poni.println("Usage :\nswitchcharset <charset>");
-				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. Required args not met.");
-			}
 		}
 		if (sl[0].equalsIgnoreCase("help")) {
 			MasterControl.poni.printCl();
