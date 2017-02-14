@@ -66,7 +66,7 @@ public class MasterControl {
 					new UnMarriedPonii("Tree Lighting Radon", "Tree", "", true, true, "\nEarth\nCutest little filly ever sparkling with the same spark that her dad has\nShe lives with Blaze at SAA.", "\nApple tree with lightning bolt behind it", "Little more yellow then AJ's", "Slightly darker orange then AJ", "Apple Jack", "Shadow Radon", new Day(11, 9, 2011), "lightning.png", "null.png")
 							.addDNA(new DNA("003H000000FDA00000000003B0188FF00UN1837002000000I1FAFE730000001B107F3FCC004CB2")),
 					new UnMarriedPonii("Shadow Jack Radon", "Jack", "", false, false, "\nUnicorn\nSecond Ponii on the AJ-Radon Line.\nSpends most of his time with Rhyne.", "\nA cloud with snowflakes", "Pale White and yellow", "Pale White and yellow", "Apple Jack", "Shadow Radon", new Day(25, 12, 2015), "jack.png", "null.png"),
-					new UnMarriedPonii("Rhyne Radon", "Rhyne", "", true, false, "\nUnicorn\nThird Ponii on the AJ-Radon Line.\nSpends most of his time with Jack.", "\nA cloud with Raindrops", "WIP", "WIP", "Apple Jack", "Shadow Radon", new Day(27, 10, 2016), "null.png", "null.png"),
+					new UnMarriedPonii("Rhyne Radon", "Rhyne", "", true, false, "\nUnicorn\nThird Ponii on the AJ-Radon Line.\nSpends most of her time with Jack.", "\nA cloud with Raindrops", "WIP", "WIP", "Apple Jack", "Shadow Radon", new Day(27, 10, 2016), "null.png", "null.png"),
 					new UnMarriedPonii("Aaron Radon", "Aaron", "", false, false, "\nEarth\nFourth Ponii on the AJ-Radon Line.\n.WIP", "\nA gear cog", "WIP", "WIP", "Apple Jack", "Shadow Radon", new Day(20, 01, 2017), "null.png", "null.png"),
 					new UnMarriedPonii("Nhyte Radon", "Nhyte", "", true, false, "\nPegasus\nFifth Ponii on the AJ-Radon Line.\n.WIP", "\nWIP", "WIP", "WIP", "Apple Jack", "Shadow Radon", new Day(16, 11, 2017), "null.png", "null.png"),
 					new UnMarriedPonii("Thorn Radon", "Thorn", "", true, false, "\nUnicorn\nSixth Ponii on the AJ-Radon Line.\n.WIP", "\nWIP", "WIP", "WIP", "Apple Jack", "Shadow Radon", new Day(20, 01, 2018), "null.png", "null.png"),
@@ -80,8 +80,14 @@ public class MasterControl {
 
 					//TODO : Another kid for blitz
 
-					//TODO : Krystla Frostia
-					//new UnMarriedPonii("Thorn Radon", "Thorn", "", true, false, "\nUnicorn\nSixth Ponii on the AJ-Radon Line.\n.WIP", "\nWIP", "WIP", "WIP", "Apple Jack", "Shadow Radon", new Day(20, 01, 2018), "null.png", "null.png"),
+					//TODO : Sierra and Starliner
+					//new MarriedPonii("Sierra <last name>", "Sierra", "", true, false, "\nWIP", "\nWIP", "WIP", "WIP", "Iyrica", "Mekrán", new Day(20, 01, 2018), "null.png", "null.png", "Starliner",
+					//		new String[] { "Galecia" }),
+					//new MarriedPoniiWithOtherKids("Starliner <last name should be same>", "Starliner", "", false, false, "\nWIP", "\nWIP", "WIP", "WIP", "Iyrica", "Mekrán", new Day(20, 01, 2018), "null.png", "null.png", new String[] {"Krystla", "Sierra",
+					//		new String[] { "Galecia", "Snowfall" },
+					//		new String[] { "Krystla", "Sierra"}),
+					new MarriedPonii("Krystla Frostia", "Krystla", "", true, false, "\nWIP", "\nWIP", "WIP", "WIP", "Iyrica", "Mekrán", new Day(3, 02, 1954), "null.png", "null.png", "Starliner",
+							new String[] { "Galecia" }),
 
 					new MarriedPonii("Galecia Frostia", "Galecia", "", true, false, "\nUnicorn\nIt's Complicated.\nLikes the cold", "\nIcicle", "Light blue", "Light blue", "Krystla", "Starliner", new Day(4, 2, 1993), "Galecia.png", "null.png", "Shadow Radon",
 							new String[] { "Powder", "Icicle", "Glacier" })
@@ -103,8 +109,8 @@ public class MasterControl {
 					new UnMarriedMachinePonii("D105", "Bit", "", false, "\nKid of C4 and C5\nUsually found playing with Emi", "\nD105", "Blue and red", "Blue and red", "C523", "C418", new Day(4, 6, 2015), "null.png", "null.png"),
 					new UnMarriedMachinePonii("D113", "Byte", "", true, "\nSecond Kid of C4 and C5\nWIP", "\nWIP", "WIP", "WIP", "C5", "C4", new Day(2, 29, 2016), "null.png", "null.png"),
 
-					//TODO : Slanger Radon
-					//new UnMarriedPonii("Thorn Radon", "Thorn", "", true, false, "\nUnicorn\nSixth Ponii on the AJ-Radon Line.\n.WIP", "\nWIP", "WIP", "WIP", "Apple Jack", "Shadow Radon", new Day(20, 01, 2018), "null.png", "null.png"),
+					new MarriedPonii("Slanger Radon", "Slanger", "", false, false, "\nUnicorn\nSeems to dislike using his magic.", "\nA Purple and yellow diamond", "Purple and yellow", "Purple and yellow", "Photonia", "Tachæon", new Day(2, 6, 1944), "null.png", "null.png", "Charrie",
+							new String[] { "Shadow", "Shyne", "Steve", "Blitz" }),
 					new MarriedPonii("Charrie (Firefly) Sychace Radon", "Charrie", "", true, false, "\nPegasus\nOld but cares allot about every ponii", "\nBlack Outlined White Thunderbolt", "Pinkish brown", "Pinkish brown", "Keri", "Craider", new Day(13, 7, 1948), "charrie.png", "null.png", "Slanger",
 							new String[] { "Shadow", "Shyne", "Steve", "Blitz" }),
 

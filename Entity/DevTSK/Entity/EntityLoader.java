@@ -371,7 +371,6 @@ public class EntityLoader {
 			MasterControl.poni.lblTextArea.setText(lastCmd);
 			this.logbook.log("Command " + sl[0] + " completed successfully.");
 		}
-		//TODO : Finish logbooking
 		if (sl[0].equalsIgnoreCase("cfg") || sl[0].equalsIgnoreCase("config")) {
 			Boolean good = true;
 			System.out.println("Saving Configuration...");
@@ -392,7 +391,7 @@ public class EntityLoader {
 					+ MasterControl.poni.lblInfo.getBackground().getBlue() + ";\n\n" + "outfr = "
 					+ MasterControl.poni.lblInfo.getForeground().getRed() + ";\n" + "outfg = "
 					+ MasterControl.poni.lblInfo.getForeground().getGreen() + ";\n" + "outfb = "
-					+ MasterControl.poni.lblInfo.getForeground().getBlue() + ";\n\n" + "sep = " + "false;";
+					+ MasterControl.poni.lblInfo.getForeground().getBlue() + ";\n\n" + "sep = " + "true;";
 			// + "frame = " + framew + ";";
 			tst = strnj.getBytes();
 
@@ -497,7 +496,7 @@ public class EntityLoader {
 		}
 		if (sl[0].equalsIgnoreCase("WIP")) {
 			String WIPEntitiis = "Entities that need work done:\n",
-					noImage = "1 = No Alternate Image\n2 = No Main Image\n3 = No images\nEntitiis that have no image:\n",
+					noImage = "1 = No Alternate Image\n2 = No Main Image\n3 = No images\nEntities that have no image:\n",
 					noDNA = "Entities without DNA:\n";
 			for (int i = 0; i < OC.length; i++) {
 				String temp = OC[i].toString(compDay);
@@ -525,6 +524,8 @@ public class EntityLoader {
 				this.logbook.log(2, e.getMessage());
 				og = "Failure.";
 			}
+			if (!og.equals("Failure."))
+				this.logbook.log("Command " + sl[0] + " completed successfully.");
 			MasterControl.poni.printCl();
 			MasterControl.poni.println(og);
 		}
