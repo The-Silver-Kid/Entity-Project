@@ -109,8 +109,9 @@ public class MasterControl {
 					new UnMarriedMachinePonii("D105", "Bit", "", false, "\nKid of C4 and C5\nUsually found playing with Emi", "\nD105", "Blue and red", "Blue and red", "C523", "C418", new Day(4, 6, 2015), "null.png", "null.png"),
 					new UnMarriedMachinePonii("D113", "Byte", "", true, "\nSecond Kid of C4 and C5\nWIP", "\nWIP", "WIP", "WIP", "C5", "C4", new Day(2, 29, 2016), "null.png", "null.png"),
 
-					new MarriedPonii("Slanger Radon", "Slanger", "", false, false, "\nUnicorn\nSeems to dislike using his magic.", "\nA Purple and yellow diamond", "Purple and yellow", "Purple and yellow", "Photonia", "Tachæon", new Day(2, 6, 1944), "null.png", "null.png", "Charrie",
-							new String[] { "Shadow", "Shyne", "Steve", "Blitz" }),
+					new MarriedPonii("Slanger Radon", "Slanger", "", false, false, "\nUnicorn\nSeems to dislike using his magic.", "\nA Purple and yellow diamond", "Purple and yellow", "Purple and yellow", "Photonia", "Tachæon", new Day(2, 6, 1944), "slanger.png", "star.png", "Charrie",
+							new String[] { "Shadow", "Shyne", "Steve", "Blitz" })
+									.addDNA(new DNA("2S3H0002000000008000FF30000FFFF00UN1837200040001414000FFFFFF000Y01FFFF004000FF")),
 					new MarriedPonii("Charrie (Firefly) Sychace Radon", "Charrie", "", true, false, "\nPegasus\nOld but cares allot about every ponii", "\nBlack Outlined White Thunderbolt", "Pinkish brown", "Pinkish brown", "Keri", "Craider", new Day(13, 7, 1948), "charrie.png", "null.png", "Slanger",
 							new String[] { "Shadow", "Shyne", "Steve", "Blitz" }),
 
