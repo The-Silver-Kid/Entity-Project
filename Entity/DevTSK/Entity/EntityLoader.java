@@ -17,7 +17,7 @@ import DevTSK.Util.DAG.ConfigException;
  *         Handles all input and output.
  */
 public class EntityLoader {
-	// private static final File f = new File("./config/MasterControl.poniiconfig.ini");
+
 	private static String lastCmd, name;
 	private static String[] sl;
 
@@ -371,7 +371,6 @@ public class EntityLoader {
 			MasterControl.poni.lblTextArea.setText(lastCmd);
 			this.logbook.log("Command " + sl[0] + " completed successfully.");
 		}
-		//TODO : Finish logbooking
 		if (sl[0].equalsIgnoreCase("cfg") || sl[0].equalsIgnoreCase("config")) {
 			Boolean good = true;
 			System.out.println("Saving Configuration...");
@@ -503,6 +502,8 @@ public class EntityLoader {
 				this.logbook.log(2, e.getMessage());
 				og = "Failure.";
 			}
+			if (!og.equals("Failure."))
+				this.logbook.log("Command " + sl[0] + " completed successfully.");
 			MasterControl.poni.printCl();
 			MasterControl.poni.println(og);
 		}

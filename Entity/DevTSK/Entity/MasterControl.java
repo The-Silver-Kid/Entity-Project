@@ -2,16 +2,27 @@ package DevTSK.Entity;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import javax.swing.JFileChooser;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import DevTSK.Util.Day;
 import DevTSK.Util.LoggerPro;
 import DevTSK.Util.DAG.ConfigException;
@@ -45,20 +56,37 @@ public class MasterControl {
 		File packinfo = new File(f.getAbsolutePath() + "/packInfo.bin");
 		if (packinfo.exists() && !packinfo.isDirectory()) {
 			p.log("Pack information found! Attempting to load.");
+			try {
+				FileInputStream in = new FileInputStream(f.getAbsolutePath() + "/packInfo.bin");
+				byte[] result = new byte[in.available()];
+				in.read(result);
+				in.close();
+				char[] ch = new char[result.length];
+				for (int i = 0; i < ch.length; i++)
+					ch[i] = (char) result[i];
+				title = new StringBuilder().append(ch).toString();
+			} catch (Exception e) {
+				p.log(2, "Something went wrong whilst trying to read packInfo.bin");
+				p.log(2, e.getMessage());
+			}
 		} else {
-			p.log(2, "No packInfo.bin found. Cannot Continue!");
-			System.exit(1);
+			p.log(2, "No packInfo.bin found. Issues may occur!");
 		}
 
 		p.log("Attempting to load files.");
-		//TODO Create Charset from files
+		//TODO : Create Charset from files
+
+		p.log(2, "System failure. the system has not yet been coded.");
 
 		try {
 			poni = new Window(title, 1, 0, 0, 0, h, p);
 			poni.punch();
-		} catch (ConfigException | IOException e) {
+		} catch (ConfigException | IOException | NullPointerException e) {
 			p.log(2, "Window Creation Failed. Cannot Continue!");
-			System.exit(2);
+			p.log(2, e.getMessage());
+			for (StackTraceElement s : e.getStackTrace())
+				p.log(2, s.toString());
+			System.exit(1);
 		}
 	}
 
@@ -68,10 +96,11 @@ public class MasterControl {
 		method.invoke(ClassLoader.getSystemClassLoader(), new Object[] { file.toURI().toURL() });
 	}
 
-	//TODO Make Dynamic!
-	private static Entity[] deserializeJSONFiles(File f) throws Exception {
+	private static Entity[] deserializeJSONFiles(File f, Class<Entity> c) throws Exception {
 		if (f.exists() && f.isDirectory()) {
-			Gson g = new Gson();
+			GsonBuilder bldr = new GsonBuilder();
+			bldr.registerTypeAdapter(Entity.class, new EntityAdapter());
+			Gson g = bldr.create();
 			FileFilter ff = new FileFilter(".json");
 			File[] jsonFiles = f.listFiles(ff);
 			Entity[] ret = new Entity[jsonFiles.length];
@@ -132,5 +161,29 @@ class FileFilter implements FilenameFilter {
 	@Override
 	public boolean accept(File directory, String fileName) {
 		return (fileName.endsWith(this.fileExtension));
+	}
+}
+
+class EntityAdapter implements JsonSerializer<Entity>, JsonDeserializer<Entity> {
+	@Override
+	public JsonElement serialize(Entity src, Type typeOfSrc, JsonSerializationContext context) {
+		JsonObject result = new JsonObject();
+		result.add("type", new JsonPrimitive(src.getClass().getSimpleName()));
+		result.add("properties", context.serialize(src, src.getClass()));
+
+		return result;
+	}
+
+	@Override
+	public Entity deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+		JsonObject jsonObject = json.getAsJsonObject();
+		String type = jsonObject.get("type").getAsString();
+		JsonElement element = jsonObject.get("properties");
+
+		try {
+			return context.deserialize(element, Class.forName("DevTSK.Entity." + type));
+		} catch (ClassNotFoundException cnfe) {
+			throw new JsonParseException("Unknown element type: " + type, cnfe);
+		}
 	}
 }
