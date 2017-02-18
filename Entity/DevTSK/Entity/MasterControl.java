@@ -92,8 +92,6 @@ public class MasterControl {
 
 		h = new EntityLoader(OC, nonOC, new Day(), p);
 
-		//p.log(2, "System failure. the system has not yet been coded.");
-
 		File ff = new File(f.getAbsolutePath() + "/Images/");
 		if (!ff.exists())
 			ff.mkdir();
