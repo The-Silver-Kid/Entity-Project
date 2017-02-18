@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -50,6 +51,8 @@ public class Window {
 
 	private String name;
 
+	private File dir;
+
 	/**
 	 * Sets up the windows based on various input variables and configuration.
 	 * 
@@ -70,13 +73,15 @@ public class Window {
 	 * @throws ConfigException
 	 * @throws IOException
 	 */
-	public Window(String n, int close, int x, int y, int CharRPWin, EntityLoader h, LoggerPro p) throws ConfigException, IOException {
+	public Window(String n, int close, int x, int y, int CharRPWin, EntityLoader h, LoggerPro p, File dir) throws ConfigException, IOException {
 
 		el = h;
 
 		this.p = p;
 
 		name = n;
+
+		this.dir = dir;
 
 		if (CharRPWin == 0) {
 
@@ -300,8 +305,29 @@ public class Window {
 	 * @return Icon format of the image.
 	 * @throws IOException
 	 */
-	public Icon getImageIcn(String imagePath) throws IOException {
+	public Icon getInternalImageIcn(String imagePath) throws IOException {
 		Image img = ImageIO.read(Window.class.getResource(imagePath));
+		ImageIcon icn = new ImageIcon(img);
+		return icn;
+	}
+
+	/**
+	 * Attempts to load an image from an external directory.
+	 * 
+	 * @param imagePath
+	 * @return
+	 * @throws IOException
+	 */
+	public Icon getExternalImageIcn(String imagePath) throws IOException {
+		System.out.println("Attempting to load image " + imagePath + " from " + dir.toString());
+		Image img;
+		try {
+			img = ImageIO.read(new File(dir.toString() + "/images/" + imagePath));
+		} catch (IOException e) {
+			p.log(1, "Image '" + imagePath + "' was not found. This error is on the pack creators hands.");
+			img = ImageIO.read(Window.class.getResource(imagePath));
+			e.printStackTrace();
+		}
 		ImageIcon icn = new ImageIcon(img);
 		return icn;
 	}

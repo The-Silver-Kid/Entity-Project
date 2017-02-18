@@ -94,8 +94,12 @@ public class MasterControl {
 
 		//p.log(2, "System failure. the system has not yet been coded.");
 
+		File ff = new File(f.getAbsolutePath() + "/Images/");
+		if (!ff.exists())
+			ff.mkdir();
+
 		try {
-			poni = new Window(title, 1, 0, 0, 0, h, p);
+			poni = new Window(title, 1, 0, 0, 0, h, p, f);
 			poni.punch();
 		} catch (ConfigException | IOException | NullPointerException e) {
 			p.log(2, "Window Creation Failed. Cannot Continue!");

@@ -27,24 +27,22 @@ public class EntityLoader {
 
 	private static final String[] commandsyntax = new String[] { "Color <R> <G> <B>", "InputColor <R> <G> <B>",
 			"OutputColor <R> <G> <B>", "OutputTextColor <R> <G> <B>", "InputTextColor <R> <G> <B>", "Exit",
-			"extract [Entity name]", "breed <Mother> <Father> (broken)", "last / l / lastcmd", "cfg / config",
+			"breed <Mother> <Father> (broken)", "last / l / lastcmd", "cfg / config",
 			"listNonOC", "listall", "listalldna", "info <entity name>", "charset",
-			"dump (developer only!)", "WIP (developer only!)" };
+	};
 
 	private static final String[] commandexpl = new String[] { "Changes Background Color", "Changes input box color",
 			"Changes outputbox color", "Changes outputbox text color", "Changes input box text color",
-			"Exit the program", "extracts the given entity's image or all if none provided",
-			"Generates a string derived from both parents",
+			"Exit the program", "Generates a string derived from both parents",
 			"re-inputs last given command into the input box for editing or re-execution",
 			"saves color scheme to config file : Poniconfig.cfg", "lists all defined OC entities",
 			"lists all defined entities", "lists all entities with DNA input", "gives general on the given entity type",
 			"prints to console the current entity list String Identifier",
-			"Dumps a list of all ponii-position numbers into EntityList.txt",
-			"Dumps a list of all entities that have WIP as one or more values" };
+	};
 
 	private static final String[] commands = new String[] { "Colour", "Color", "InputColour", "InputColor",
 			"OutputColour", "OutputColor", "Exit", "OutputTextColor", "InputTextColor", "OutputTextColour",
-			"InputTextColour", "errorcheck", "extract", "breed", "last", "l", "lastcmd", "cfg", "config", "listNonOC",
+			"InputTextColour", "errorcheck", "breed", "last", "l", "lastcmd", "cfg", "config", "listNonOC",
 			"listall", "listalldna", "info", "charset", "help", "dump", "wip" };
 
 	private static final String[] modes = new String[] { "0", "1", "2" };
@@ -122,8 +120,8 @@ public class EntityLoader {
 		}
 		MasterControl.poni.lblTextArea.setText("");
 		try {
-			MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/files/null.png"));
-			MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/files/null.png"));
+			MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getInternalImageIcn("/DevTSK/Entity/files/null.png"));
+			MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getInternalImageIcn("/DevTSK/Entity/files/null.png"));
 		} catch (IOException e) {
 			this.logbook.log(2, "A picture wasn't found!");
 			this.logbook.log(2, e.getMessage());
@@ -217,28 +215,6 @@ public class EntityLoader {
 				this.logbook.log("Command " + sl[0] + " completed successfully.");
 			} else
 				this.logbook.log(1, "Command " + sl[0] + " failed to complete successfully. Required args not met.");
-		}
-		if (sl[0].equalsIgnoreCase("extract")) {
-			if (sl.length > 1) {
-				try {
-					extract(sl[1], false);
-				} catch (IOException e) {
-					this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. IOException");
-					this.logbook.log(2, e.getMessage());
-					for (StackTraceElement y : e.getStackTrace())
-						this.logbook.log(2, y.toString());
-				}
-			} else if (sl.length == 1) {
-				try {
-					extract();
-				} catch (IOException e) {
-					this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. IOException");
-					this.logbook.log(2, e.getMessage());
-					for (StackTraceElement y : e.getStackTrace())
-						this.logbook.log(2, y.toString());
-				}
-			} else
-				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. Required args not met.");
 		}
 		if (sl[0].equalsIgnoreCase("breed")) {
 			String say = "Syntax is breed <mode> <Father> <Mother> [times]";
@@ -541,15 +517,15 @@ public class EntityLoader {
 
 		if (b)
 			try {
-				MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/files/" + OC[i].getImagePath()));
-				MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/files/" + OC[i].getAltImagePath()));
+				MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getExternalImageIcn(OC[i].getImagePath()));
+				MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getExternalImageIcn(OC[i].getAltImagePath()));
 			} catch (IOException e) {
 				this.logbook.log(2, "An error occurred while trying to load an image.");
 			}
 		if (!b)
 			try {
-				MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/files/" + show[i].getImagePath()));
-				MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/files/" + show[i].getAltImagePath()));
+				MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getExternalImageIcn(show[i].getImagePath()));
+				MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getExternalImageIcn(show[i].getAltImagePath()));
 			} catch (IOException e) {
 				this.logbook.log(2, "An error occurred while trying to load an image.");
 			}
@@ -571,57 +547,6 @@ public class EntityLoader {
 		for (int i = 0; i < commandexpl.length; i++)
 			XD = XD + "\n" + commandsyntax[i] + " : " + commandexpl[i];
 		return XD;
-	}
-
-	/**
-	 * Handles Extracting of Images of a specific entity based on the input
-	 * name.
-	 * 
-	 * @param String
-	 *            Entity Name
-	 * @throws IOException
-	 */
-	private void extract(String string, Boolean fromLoop) throws IOException {
-		Boolean preformAction = false;
-		String charToExtract = "null";
-		for (int i = 0; i < OC.length; i++) {
-			if (string.equalsIgnoreCase(OC[i].getAltName())) {
-				preformAction = true;
-				charToExtract = OC[i].getImagePath();
-			}
-			if (string.equalsIgnoreCase(OC[i].getName())) {
-				preformAction = true;
-				charToExtract = OC[i].getImagePath();
-			}
-		}
-		if (preformAction) {
-			this.logbook.log(1, "Extracting : " + string);
-			File f = new File("./extracted/");
-			f.mkdir();
-			send = new FileOutputStream(f + "/" + charToExtract);
-			byte[] out = new byte[EntityLoader.class.getResourceAsStream("/DevTSK/Entity/files/" + charToExtract).available()];
-			EntityLoader.class.getResourceAsStream("/DevTSK/Entity/files/" + charToExtract).read(out);
-			send.write(out);
-			this.logbook.log(1, "Extracted : " + charToExtract + " to \"" + f.getAbsoluteFile() + "\"");
-			send.close();
-			if (!fromLoop)
-				this.logbook.log("Command " + sl[0] + " completed successfully.");
-		} else
-			this.logbook.log(2, "Entity : " + string + " does not exist.");
-	}
-
-	/**
-	 * Extracts all Entity images.
-	 * Works by way of cycling through the OC entity name list and calling
-	 * extract(String) with all names.
-	 * 
-	 * @throws IOException
-	 */
-	private void extract() throws IOException {
-		for (int i = 0; i < OC.length; i++) {
-			extract(OC[i].getName(), true);
-		}
-		this.logbook.log("Command " + sl[0] + " completed successfully.");
 	}
 
 	/**
