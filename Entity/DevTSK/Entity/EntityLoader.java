@@ -122,11 +122,13 @@ public class EntityLoader {
 		}
 		MasterControl.poni.lblTextArea.setText("");
 		try {
-			MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/images/null.png"));
-			MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/images/null.png"));
+			MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/files/null.png"));
+			MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/files/null.png"));
 		} catch (IOException e) {
 			this.logbook.log(2, "A picture wasn't found!");
 			this.logbook.log(2, e.getMessage());
+			for (StackTraceElement y : e.getStackTrace())
+				this.logbook.log(2, y.toString());
 		}
 		if (handler >= 0) {
 			getInfo(origin, handler);
@@ -223,6 +225,8 @@ public class EntityLoader {
 				} catch (IOException e) {
 					this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. IOException");
 					this.logbook.log(2, e.getMessage());
+					for (StackTraceElement y : e.getStackTrace())
+						this.logbook.log(2, y.toString());
 				}
 			} else if (sl.length == 1) {
 				try {
@@ -230,6 +234,8 @@ public class EntityLoader {
 				} catch (IOException e) {
 					this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. IOException");
 					this.logbook.log(2, e.getMessage());
+					for (StackTraceElement y : e.getStackTrace())
+						this.logbook.log(2, y.toString());
 				}
 			} else
 				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. Required args not met.");
@@ -402,6 +408,8 @@ public class EntityLoader {
 			} catch (IOException e) {
 				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. IOException");
 				this.logbook.log(2, e.getMessage());
+				for (StackTraceElement y : e.getStackTrace())
+					this.logbook.log(2, y.toString());
 				good = false;
 			}
 			if (good)
@@ -465,6 +473,8 @@ public class EntityLoader {
 			} catch (IOException e) {
 				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. IOException.");
 				this.logbook.log(2, e.getMessage());
+				for (StackTraceElement y : e.getStackTrace())
+					this.logbook.log(2, y.toString());
 				og = "Something went wrong while trying to save the file.";
 			}
 			MasterControl.poni.printCl();
@@ -500,6 +510,8 @@ public class EntityLoader {
 			} catch (IOException e) {
 				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. IOException.");
 				this.logbook.log(2, e.getMessage());
+				for (StackTraceElement y : e.getStackTrace())
+					this.logbook.log(2, y.toString());
 				og = "Failure.";
 			}
 			if (!og.equals("Failure."))
@@ -529,15 +541,15 @@ public class EntityLoader {
 
 		if (b)
 			try {
-				MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/images/" + OC[i].getImagePath()));
-				MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/images/" + OC[i].getAltImagePath()));
+				MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/files/" + OC[i].getImagePath()));
+				MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/files/" + OC[i].getAltImagePath()));
 			} catch (IOException e) {
 				this.logbook.log(2, "An error occurred while trying to load an image.");
 			}
 		if (!b)
 			try {
-				MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/images/" + show[i].getImagePath()));
-				MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/images/" + show[i].getAltImagePath()));
+				MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/files/" + show[i].getImagePath()));
+				MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getImageIcn("/DevTSK/Entity/files/" + show[i].getAltImagePath()));
 			} catch (IOException e) {
 				this.logbook.log(2, "An error occurred while trying to load an image.");
 			}
@@ -587,8 +599,8 @@ public class EntityLoader {
 			File f = new File("./extracted/");
 			f.mkdir();
 			send = new FileOutputStream(f + "/" + charToExtract);
-			byte[] out = new byte[EntityLoader.class.getResourceAsStream("/DevTSK/Entity/images/" + charToExtract).available()];
-			EntityLoader.class.getResourceAsStream("/DevTSK/Entity/images/" + charToExtract).read(out);
+			byte[] out = new byte[EntityLoader.class.getResourceAsStream("/DevTSK/Entity/files/" + charToExtract).available()];
+			EntityLoader.class.getResourceAsStream("/DevTSK/Entity/files/" + charToExtract).read(out);
 			send.write(out);
 			this.logbook.log(1, "Extracted : " + charToExtract + " to \"" + f.getAbsoluteFile() + "\"");
 			send.close();

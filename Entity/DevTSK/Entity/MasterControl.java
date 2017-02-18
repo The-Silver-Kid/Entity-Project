@@ -3,7 +3,6 @@ package DevTSK.Entity;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -46,10 +45,13 @@ public class MasterControl {
 
 		File f = findDir();
 
-		Entity[] elist;
-
 		p.log("Loading external classes");
-		findClasses(f);
+		try {
+			findClasses(f);
+		} catch (NullPointerException e) {
+			p.log("User cancelled Entity Pack choosing... System will exit.");
+			System.exit(0);
+		}
 		p.log("Loading of external classes finished.");
 
 		p.log("Looking for packInfo.bin");
@@ -75,8 +77,22 @@ public class MasterControl {
 
 		p.log("Attempting to load files.");
 		//TODO : Create Charset from files
+		Entity[] OC = new Entity[] {};
+		Entity[] nonOC = new Entity[] {};
+		try {
+			OC = deserializeJSONFiles(f);
+			nonOC = deserializeJSONFiles(new File(f.getAbsolutePath() + "/nonOC/"));
+		} catch (Exception e1) {
+			p.log(2, "Something went wrong in loading entities! Cannot Continue");
+			p.log(2, e1.getMessage());
+			for (StackTraceElement s : e1.getStackTrace())
+				p.log(2, s.toString());
+			System.exit(1);
+		}
 
-		p.log(2, "System failure. the system has not yet been coded.");
+		h = new EntityLoader(OC, nonOC, new Day(), p);
+
+		//p.log(2, "System failure. the system has not yet been coded.");
 
 		try {
 			poni = new Window(title, 1, 0, 0, 0, h, p);
@@ -86,7 +102,7 @@ public class MasterControl {
 			p.log(2, e.getMessage());
 			for (StackTraceElement s : e.getStackTrace())
 				p.log(2, s.toString());
-			System.exit(1);
+			System.exit(2);
 		}
 	}
 
@@ -96,7 +112,9 @@ public class MasterControl {
 		method.invoke(ClassLoader.getSystemClassLoader(), new Object[] { file.toURI().toURL() });
 	}
 
-	private static Entity[] deserializeJSONFiles(File f, Class<Entity> c) throws Exception {
+	private static Entity[] deserializeJSONFiles(File f) throws Exception {
+		if (!f.exists())
+			f.mkdirs();
 		if (f.exists() && f.isDirectory()) {
 			GsonBuilder bldr = new GsonBuilder();
 			bldr.registerTypeAdapter(Entity.class, new EntityAdapter());
@@ -104,36 +122,38 @@ public class MasterControl {
 			FileFilter ff = new FileFilter(".json");
 			File[] jsonFiles = f.listFiles(ff);
 			Entity[] ret = new Entity[jsonFiles.length];
-			for (int i = 0; i < jsonFiles.length; i++) {
-				BufferedReader br = new BufferedReader(new FileReader(jsonFiles[i]));
-				ret[i] = g.fromJson(br, Entity.class);
-			}
+			if (!(ret.length == 0))
+				for (int i = 0; i < jsonFiles.length; i++) {
+					BufferedReader br = new BufferedReader(new FileReader(jsonFiles[i]));
+					ret[i] = g.fromJson(br, Entity.class);
+				}
+			else
+				ret = new Entity[] {};
 			return ret;
-		} else if (!f.exists() && f.isDirectory()) {
-			throw new FileNotFoundException("Folder does not exist");
 		} else if (f.exists() && !f.isDirectory()) {
 			throw new MalformedURLException(f.getName() + " is a file not a folder");
 		} else {
-			throw new Exception("Unspecified error");
+			throw new Exception("Unspecified error in " + f.getAbsolutePath());
 		}
 	}
 
 	private static void findClasses(File f) {
 		File dir = new File(f.getAbsolutePath() + "/classes/");
+		if (!dir.exists())
+			dir.mkdirs();
 		if (dir.exists() && dir.isDirectory()) {
-			FileFilter ff = new FileFilter(".class");
+			FileFilter ff = new FileFilter(".jar");
 			File[] classes = dir.listFiles(ff);
 
 			for (int i = 0; i < classes.length; i++) {
 				try {
+					p.log("Attempting to load '" + classes[i].getName() + "'.");
 					addSoftwareLibrary(classes[i]);
 				} catch (Exception e) {
 					p.log(2, "Error in loading class file '" + classes[i].getName() + "'.");
 					p.log(2, e.getMessage());
 				}
 			}
-		} else if (!dir.exists() && dir.isDirectory()) {
-			p.log(2, "Folder does not exist");
 		} else if (dir.exists() && !dir.isDirectory()) {
 			p.log(2, dir.getName() + " is a file not a folder");
 		} else {
@@ -181,7 +201,7 @@ class EntityAdapter implements JsonSerializer<Entity>, JsonDeserializer<Entity> 
 		JsonElement element = jsonObject.get("properties");
 
 		try {
-			return context.deserialize(element, Class.forName("DevTSK.Entity." + type));
+			return context.deserialize(element, Class.forName("entity." + type));
 		} catch (ClassNotFoundException cnfe) {
 			throw new JsonParseException("Unknown element type: " + type, cnfe);
 		}
