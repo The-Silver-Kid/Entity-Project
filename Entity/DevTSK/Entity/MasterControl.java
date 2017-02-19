@@ -1,7 +1,18 @@
 package DevTSK.Entity;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import javax.swing.JOptionPane;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import DevTSK.Entity.Classes.Carribou.UnMarriedCarribou;
 import DevTSK.Entity.Classes.DragonPonii.UnMarriedDargonPonii;
 import DevTSK.Entity.Classes.DragonPonii.UnMarriedPoniiDargon;
@@ -227,6 +238,12 @@ public class MasterControl {
 				}, compDay, p);
 			}
 		}
+		GsonBuilder bldr = new GsonBuilder();
+		bldr.registerTypeAdapter(Entity.class, new EntityAdapter());
+		Gson g = bldr.create();
+
+		for (int i = 0; i < h.OC.length; i++)
+			System.out.println(g.getAdapter(Entity.class).toJson(h.OC[i]));
 		if (h == null) {
 			JOptionPane.showMessageDialog(null, "OH NOES!\nThe charset '" + args[0] + "' has not been setup yet!\n\nSystem will now exit.");
 			System.exit(1);
@@ -235,5 +252,29 @@ public class MasterControl {
 		poni.punch();
 		//poni.setupConfig();
 		//poni.punch();
+	}
+}
+
+class EntityAdapter implements JsonSerializer<Entity>, JsonDeserializer<Entity> {
+	@Override
+	public JsonElement serialize(Entity src, Type typeOfSrc, JsonSerializationContext context) {
+		JsonObject result = new JsonObject();
+		result.add("type", new JsonPrimitive(src.getClass().getSimpleName()));
+		result.add("properties", context.serialize(src, src.getClass()));
+
+		return result;
+	}
+
+	@Override
+	public Entity deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+		JsonObject jsonObject = json.getAsJsonObject();
+		String type = jsonObject.get("type").getAsString();
+		JsonElement element = jsonObject.get("properties");
+
+		try {
+			return context.deserialize(element, Class.forName("entity." + type));
+		} catch (ClassNotFoundException cnfe) {
+			throw new JsonParseException("Unknown element type: " + type, cnfe);
+		}
 	}
 }
