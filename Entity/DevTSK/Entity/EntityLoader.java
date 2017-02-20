@@ -25,32 +25,30 @@ public class EntityLoader {
 
 	private static FileOutputStream send;
 
+	private final File WORKING_DIR;
+
 	private static final String[] commandsyntax = new String[] { "Color <R> <G> <B>", "InputColor <R> <G> <B>",
 			"OutputColor <R> <G> <B>", "OutputTextColor <R> <G> <B>", "InputTextColor <R> <G> <B>", "Exit",
-			"breed <Mother> <Father> (broken)", "last / l / lastcmd", "cfg / config",
-			"listNonOC", "listall", "listalldna", "info <entity name>", "charset",
+			"last / l / lastcmd", "cfg / config", "listall", "listalldna", "info <entity name>", "dir",
 	};
 
 	private static final String[] commandexpl = new String[] { "Changes Background Color", "Changes input box color",
 			"Changes outputbox color", "Changes outputbox text color", "Changes input box text color",
-			"Exit the program", "Generates a string derived from both parents",
-			"re-inputs last given command into the input box for editing or re-execution",
-			"saves color scheme to config file : Poniconfig.cfg", "lists all defined OC entities",
-			"lists all defined entities", "lists all entities with DNA input", "gives general on the given entity type",
-			"prints to console the current entity list String Identifier",
+			"Exit the program", "re-inputs last given command into the input box for editing or re-execution",
+			"saves color scheme to config file : Poniconfig.cfg", "lists all defined entities",
+			"gives general on the given entity type", "print the current working directory",
 	};
 
 	private static final String[] commands = new String[] { "Colour", "Color", "InputColour", "InputColor",
 			"OutputColour", "OutputColor", "Exit", "OutputTextColor", "InputTextColor", "OutputTextColour",
-			"InputTextColour", "errorcheck", "breed", "last", "l", "lastcmd", "cfg", "config", "listNonOC",
-			"listall", "listalldna", "info", "charset", "help", "dump", "wip" };
+			"InputTextColour", "errorcheck", "breed", "last", "l", "lastcmd", "cfg", "config",
+			"listall", "listalldna", "info", "dir", "help", "dump", "wip" };
 
 	private static final String[] modes = new String[] { "0", "1", "2" };
 
 	private LoggerPro logbook;
 
 	Entity[] OC;
-	Entity[] show;
 
 	/**
 	 * Main Constructor that sets up the Entity Loader.
@@ -62,9 +60,9 @@ public class EntityLoader {
 	 * @param Day
 	 *            Day used for comparison
 	 */
-	public EntityLoader(Entity[] o, Entity[] c, Day d, LoggerPro logbook) {
+	public EntityLoader(Entity[] o, Day d, LoggerPro logbook, File f) {
+		WORKING_DIR = f;
 		OC = o;
-		show = c;
 		compDay = d;
 		this.logbook = logbook;
 		this.logbook.log("Constructed EntityLoader");
@@ -81,23 +79,13 @@ public class EntityLoader {
 		sl = s.split("\\s+");
 		this.logbook.log("Processing input : " + s);
 		int handler = -1;
-		Boolean origin = true, controlVar = false;
+		Boolean controlVar = false;
 		for (int i = 0; i < OC.length; i++) {
 			if (OC[i].getName().equalsIgnoreCase(s)) {
 				handler = i;
 			}
 			if (s.equalsIgnoreCase(OC[i].getAltName())) {
 				handler = i;
-			}
-		}
-		for (int i = 0; i < show.length; i++) {
-			if (show[i].getName().equalsIgnoreCase(s)) {
-				handler = i;
-				origin = false;
-			}
-			if (show[i].getAltName().equalsIgnoreCase(s)) {
-				handler = i;
-				origin = false;
 			}
 		}
 
@@ -129,14 +117,17 @@ public class EntityLoader {
 				this.logbook.log(2, y.toString());
 		}
 		if (handler >= 0) {
-			getInfo(origin, handler);
+			getInfo(handler);
 		} else if (!controlVar) {
 			MasterControl.poni.println(help());
 		} else if (controlVar) {
 			try {
 				control(s);
 			} catch (Exception e) {
-				e.printStackTrace();
+				this.logbook.log(2, "Something went wrong while attempting to process unknown command.");
+				this.logbook.log(2, e.getMessage());
+				for (StackTraceElement sw : e.getStackTrace())
+					this.logbook.log(2, sw.toString());
 			}
 		}
 	}
@@ -159,7 +150,8 @@ public class EntityLoader {
 			System.exit(0);
 		}
 		if (sl[0].equalsIgnoreCase("ErrorCheck")) {
-			System.out.println("Stub command");
+			this.logbook.log(1, "Attempted to run the stub command 'ErrorCheck'.");
+			this.logbook.log(1, "This command does nothing. But is required to get the system running.");
 		}
 		if (sl[0].equalsIgnoreCase("Color") || sl[0].equalsIgnoreCase("Colour")) {
 			if (sl.length == 4) {
@@ -233,7 +225,6 @@ public class EntityLoader {
 						+ "2 = Colour will be chosen by chopping the parents colours and mixing the values.";
 				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. Invalid mode.");
 			} else {
-				Boolean OCo = true, OCt = true;
 				int f = -1, m = -1;
 				for (int i = 0; i < OC.length; i++) {
 					if (sl[2].equalsIgnoreCase(OC[i].getName())) {
@@ -241,16 +232,6 @@ public class EntityLoader {
 					}
 					if (sl[2].equalsIgnoreCase(OC[i].getAltName())) {
 						f = i;
-					}
-				}
-				for (int i = 0; i < show.length; i++) {
-					if (sl[2].equalsIgnoreCase(show[i].getName())) {
-						f = i;
-						OCo = false;
-					}
-					if (sl[2].equalsIgnoreCase(show[i].getAltName())) {
-						f = i;
-						OCo = false;
 					}
 				}
 				for (int i = 0; i < OC.length; i++) {
@@ -261,16 +242,6 @@ public class EntityLoader {
 						m = i;
 					}
 				}
-				for (int i = 0; i < show.length; i++) {
-					if (sl[3].equalsIgnoreCase(show[i].getName())) {
-						m = i;
-						OCt = false;
-					}
-					if (sl[3].equalsIgnoreCase(show[i].getAltName())) {
-						m = i;
-						OCt = false;
-					}
-				}
 				if (sl[1].equals("0"))
 					b = new Breeder(Breeder.INTACT_COLOURS);
 				if (sl[1].equals("1"))
@@ -279,26 +250,12 @@ public class EntityLoader {
 					b = new Breeder(Breeder.RANDOM);
 				if (f != -1 && m != -1) {
 
-					if (OCo && OCt)
-						say = b.breed(OC[f], OC[m]);
-					if (OCo && !OCt)
-						say = b.breed(OC[f], show[m]);
-					if (!OCo && OCt)
-						say = b.breed(show[f], OC[m]);
-					if (!OCo && !OCt)
-						say = b.breed(show[f], show[m]);
+					say = b.breed(OC[f], OC[m]);
 					if (sl.length == 5) {
 						say = "";
 						for (int i = 1; i < Integer.parseInt(sl[4]); i++) {
 							if (sl[0].equalsIgnoreCase("breed")) {
-								if (OCo && OCt)
-									say += "\n" + b.breed(OC[f], OC[m]);
-								if (OCo && !OCt)
-									say += "\n" + b.breed(OC[f], show[m]);
-								if (!OCo && OCt)
-									say += "\n" + b.breed(show[f], OC[m]);
-								if (!OCo && !OCt)
-									say += "\n" + b.breed(show[f], show[m]);
+								say += "\n" + b.breed(OC[f], OC[m]);
 							}
 						}
 					}
@@ -311,15 +268,12 @@ public class EntityLoader {
 				this.logbook.log("Command " + sl[0] + " completed successfully.");
 			MasterControl.poni.lblInfo.setText(say);
 		}
-		if (sl[0].equalsIgnoreCase("listNonOC") || sl[0].equalsIgnoreCase("listall") || sl[0].equalsIgnoreCase("listalldna")) {
+		if (sl[0].equalsIgnoreCase("listall") || sl[0].equalsIgnoreCase("listalldna")) {
 			MasterControl.poni.printCl();
 			if (sl[0].equalsIgnoreCase("listall")) {
-				MasterControl.poni.println("Acceptable OC/NonOC Ponii Names: " + (OC.length + show.length) + "\n");
+				MasterControl.poni.println("Acceptable OC/NonOC Ponii Names: " + OC.length + "\n");
 				for (int i = 0; i < OC.length; i++) {
 					MasterControl.poni.println(OC[i].getName() + "\tAKA\t" + OC[i].getAltName());
-				}
-				for (int i = 0; i < show.length; i++) {
-					MasterControl.poni.println(show[i].getName() + "\tAKA\t" + show[i].getAltName());
 				}
 			} else if (sl[0].equalsIgnoreCase("listalldna")) {
 				MasterControl.poni.println("OC/NonOC Poniis with DNA: \n");
@@ -331,25 +285,10 @@ public class EntityLoader {
 					}
 				}
 
-				for (int i = 0; i < show.length; i++) {
-					try {
-						if (show[i].getDNA() != null)
-							MasterControl.poni.println(show[i].getName() + "\tAKA\t" + show[i].getAltName());
-					} catch (Exception e) {
-					}
-				}
-
-			} else {
-				MasterControl.poni.println("Acceptable NonOC Ponii Names: " + show.length + "\n");
-				for (int i = 0; i < show.length; i++) {
-					MasterControl.poni.println(show[i].getName() + "\tAKA\t" + show[i].getAltName());
-				}
 			}
 			this.logbook.log("Command " + sl[0] + " completed successfully.");
 		}
-		if (sl[0].equalsIgnoreCase("last") || sl[0].equalsIgnoreCase("lastcmd") || sl[0].equalsIgnoreCase("l"))
-
-		{
+		if (sl[0].equalsIgnoreCase("last") || sl[0].equalsIgnoreCase("lastcmd") || sl[0].equalsIgnoreCase("l")) {
 			MasterControl.poni.lblTextArea.setText(lastCmd);
 			this.logbook.log("Command " + sl[0] + " completed successfully.");
 		}
@@ -373,7 +312,7 @@ public class EntityLoader {
 					+ MasterControl.poni.lblInfo.getBackground().getBlue() + ";\n\n" + "outfr = "
 					+ MasterControl.poni.lblInfo.getForeground().getRed() + ";\n" + "outfg = "
 					+ MasterControl.poni.lblInfo.getForeground().getGreen() + ";\n" + "outfb = "
-					+ MasterControl.poni.lblInfo.getForeground().getBlue() + ";\n\n" + "sep = " + "false;";
+					+ MasterControl.poni.lblInfo.getForeground().getBlue() + ";\n\n" + "sep = " + "true;";
 			// + "frame = " + framew + ";";
 			tst = strnj.getBytes();
 
@@ -384,8 +323,8 @@ public class EntityLoader {
 			} catch (IOException e) {
 				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. IOException");
 				this.logbook.log(2, e.getMessage());
-				for (StackTraceElement y : e.getStackTrace())
-					this.logbook.log(2, y.toString());
+				for (StackTraceElement sw : e.getStackTrace())
+					this.logbook.log(2, sw.toString());
 				good = false;
 			}
 			if (good)
@@ -404,13 +343,6 @@ public class EntityLoader {
 				for (int i = 0; i < OC.length; i++) {
 					if (sl[1].equalsIgnoreCase(OC[i].getName()) || sl[1].equalsIgnoreCase(OC[i].getAltName())) {
 						doop = true;
-						loc = i;
-					}
-				}
-				for (int i = 0; i < show.length; i++) {
-					if (sl[1].equalsIgnoreCase(show[i].getName()) || sl[1].equalsIgnoreCase(show[i].getAltName())) {
-						doop = true;
-						origin = true;
 						loc = i;
 					}
 				}
@@ -445,7 +377,7 @@ public class EntityLoader {
 			}
 			StringWriter sw = new StringWriter();
 			try {
-				sw.Write(out, "EntityList.txt", true);
+				sw.Write(out, new File(WORKING_DIR + "/EntityList.txt"), true);
 			} catch (IOException e) {
 				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. IOException.");
 				this.logbook.log(2, e.getMessage());
@@ -482,7 +414,7 @@ public class EntityLoader {
 
 			StringWriter sw = new StringWriter();
 			try {
-				sw.Write(WIPEntitiis, "WIPList.txt", true);
+				sw.Write(WIPEntitiis, new File(WORKING_DIR + "/WIPList.txt"), true);
 			} catch (IOException e) {
 				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. IOException.");
 				this.logbook.log(2, e.getMessage());
@@ -494,6 +426,11 @@ public class EntityLoader {
 				this.logbook.log("Command " + sl[0] + " completed successfully.");
 			MasterControl.poni.printCl();
 			MasterControl.poni.println(og);
+		}
+		if (sl[0].equalsIgnoreCase("dir")) {
+			MasterControl.poni.printCl();
+			MasterControl.poni.println(WORKING_DIR.getAbsolutePath());
+			this.logbook.log("Command " + sl[0] + " completed successfully.");
 		}
 	}
 
@@ -507,28 +444,20 @@ public class EntityLoader {
 	 * @param int
 	 *            Input Integer
 	 */
-	private void getInfo(Boolean b, int i) {
+	private void getInfo(int i) {
 		MasterControl.poni.printCl();
 
-		if (b)
-			MasterControl.poni.println(OC[i].toString(compDay));
-		if (!b)
-			MasterControl.poni.println(show[i].toString(compDay));
+		MasterControl.poni.println(OC[i].toString(compDay));
 
-		if (b)
-			try {
-				MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getExternalImageIcn(OC[i].getImagePath()));
-				MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getExternalImageIcn(OC[i].getAltImagePath()));
-			} catch (IOException e) {
-				this.logbook.log(2, "An error occurred while trying to load an image.");
-			}
-		if (!b)
-			try {
-				MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getExternalImageIcn(show[i].getImagePath()));
-				MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getExternalImageIcn(show[i].getAltImagePath()));
-			} catch (IOException e) {
-				this.logbook.log(2, "An error occurred while trying to load an image.");
-			}
+		try {
+			MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getExternalImageIcn(OC[i].getImagePath()));
+			MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getExternalImageIcn(OC[i].getAltImagePath()));
+		} catch (IOException e) {
+			this.logbook.log(2, "An error occurred while trying to load an image.");
+			this.logbook.log(2, e.getMessage());
+			for (StackTraceElement sw : e.getStackTrace())
+				this.logbook.log(2, sw.toString());
+		}
 	}
 
 	/**

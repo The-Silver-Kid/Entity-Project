@@ -319,7 +319,7 @@ public class Window {
 	 * @throws IOException
 	 */
 	public Icon getExternalImageIcn(String imagePath) throws IOException {
-		System.out.println("Attempting to load image " + imagePath + " from " + dir.toString());
+		p.log("Attempting to load image " + imagePath + " from " + dir.toString());
 		Image img;
 		try {
 			img = ImageIO.read(new File(dir.toString() + "/images/" + imagePath));

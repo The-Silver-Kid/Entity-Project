@@ -3,6 +3,7 @@ package DevTSK.Entity;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,6 +39,8 @@ public class MasterControl {
 	public static String charsetname = "null";
 	public static Window poni;
 	public static Day compDay;
+
+	private static ArrayList<Entity> list = new ArrayList<Entity>();
 
 	private static LoggerPro p = new LoggerPro(new String[] { "-", "#", "X" }, LoggerPro.FILE_AND_CONSOLE);
 
@@ -78,10 +82,8 @@ public class MasterControl {
 		p.log("Attempting to load files.");
 		//TODO : Create Charset from files
 		Entity[] OC = new Entity[] {};
-		Entity[] nonOC = new Entity[] {};
 		try {
 			OC = deserializeJSONFiles(f);
-			nonOC = deserializeJSONFiles(new File(f.getAbsolutePath() + "/nonOC/"));
 		} catch (Exception e1) {
 			p.log(2, "Something went wrong in loading entities! Cannot Continue");
 			p.log(2, e1.getMessage());
@@ -90,7 +92,7 @@ public class MasterControl {
 			System.exit(1);
 		}
 
-		h = new EntityLoader(OC, nonOC, new Day(), p);
+		h = new EntityLoader(OC, new Day(), p, f);
 
 		File ff = new File(f.getAbsolutePath() + "/Images/");
 		if (!ff.exists())
@@ -118,25 +120,61 @@ public class MasterControl {
 		if (!f.exists())
 			f.mkdirs();
 		if (f.exists() && f.isDirectory()) {
-			GsonBuilder bldr = new GsonBuilder();
-			bldr.registerTypeAdapter(Entity.class, new EntityAdapter());
-			Gson g = bldr.create();
-			FileFilter ff = new FileFilter(".json");
-			File[] jsonFiles = f.listFiles(ff);
-			Entity[] ret = new Entity[jsonFiles.length];
-			if (!(ret.length == 0))
-				for (int i = 0; i < jsonFiles.length; i++) {
-					BufferedReader br = new BufferedReader(new FileReader(jsonFiles[i]));
-					ret[i] = g.fromJson(br, Entity.class);
+
+			String[] dirs = f.list(new FilenameFilter() {
+				public boolean accept(File current, String name) {
+					return (new File(current, name).isDirectory() && !new File(current, name).isHidden());
 				}
-			else
-				ret = new Entity[] {};
+			});
+
+			recurse(dirs, 3, f);
+
+			Entity[] ret = new Entity[list.size()];
+			for (int i = 0; i < list.size(); i++)
+				ret[i] = list.get(i);
 			return ret;
 		} else if (f.exists() && !f.isDirectory()) {
 			throw new MalformedURLException(f.getName() + " is a file not a folder");
 		} else {
 			throw new Exception("Unspecified error in " + f.getAbsolutePath());
 		}
+	}
+
+	private static void recurse(String[] strs, int i, File f) throws FileNotFoundException {
+		if (i < 0)
+			return;
+		for (String s : strs) {
+			File g = new File(f.getAbsolutePath() + "/" + s);
+			Entity[] es = findEntity(g);
+			for (Entity e : es)
+				list.add(e);
+			String[] dirs = g.list(new FilenameFilter() {
+				public boolean accept(File current, String name) {
+					return (new File(current, name).isDirectory() && !new File(current, name).isHidden());
+				}
+			});
+			recurse(dirs, i - 1, g);
+		}
+	}
+
+	private static Entity[] findEntity(File f) throws FileNotFoundException {
+		GsonBuilder bldr = new GsonBuilder();
+		bldr.registerTypeAdapter(Entity.class, new EntityAdapter());
+		Gson g = bldr.create();
+
+		FileFilter ff = new FileFilter(".json");
+		File[] jsonFiles = f.listFiles(ff);
+		Entity[] ret = new Entity[] {};
+		if (jsonFiles.length >= 1)
+			ret = new Entity[jsonFiles.length];
+		if (!(ret.length == 0))
+			for (int i = 0; i < jsonFiles.length; i++) {
+				BufferedReader br = new BufferedReader(new FileReader(jsonFiles[i]));
+				ret[i] = g.fromJson(br, Entity.class);
+			}
+		else
+			ret = new Entity[] {};
+		return ret;
 	}
 
 	private static void findClasses(File f) {
