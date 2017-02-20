@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -48,6 +49,10 @@ public class Window {
 
 	private LoggerPro p;
 
+	private String name;
+
+	private File dir;
+
 	/**
 	 * Sets up the windows based on various input variables and configuration.
 	 * 
@@ -68,18 +73,22 @@ public class Window {
 	 * @throws ConfigException
 	 * @throws IOException
 	 */
-	public Window(String n, int close, int x, int y, int CharRPWin, EntityLoader h, LoggerPro p) throws ConfigException, IOException {
+	public Window(String n, int close, int x, int y, int CharRPWin, EntityLoader h, LoggerPro p, File dir) throws ConfigException, IOException {
 
 		el = h;
 
 		this.p = p;
+
+		name = n;
+
+		this.dir = dir;
 
 		if (CharRPWin == 0) {
 
 			frmPoniiPic = new JFrame();
 			frmPoniiPic.getContentPane().setBackground(SystemColor.window);
 			frmPoniiPic
-					.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("/DevTSK/Entity/images/ikon.png")));
+					.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("/DevTSK/Entity/files/ikon.png")));
 			frmPoniiPic.setTitle(n);
 			frmPoniiPic.setBackground(SystemColor.window);
 			frmPoniiPic.setResizable(false);
@@ -90,7 +99,7 @@ public class Window {
 				frmPoniiPic.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			} else {
 				try {
-					throw new Exception("Invalad Close Opperation");
+					throw new Exception("Invalid Close Operation");
 				} catch (Exception e) {
 					e.printStackTrace();
 					frmPoniiPic.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -149,7 +158,7 @@ public class Window {
 				frmPoniiPic.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			} else {
 				try {
-					throw new Exception("Invalad Close Opperation");
+					throw new Exception("Invalid Close Operation");
 				} catch (Exception e) {
 					e.printStackTrace();
 					frmPoniiPic.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -296,8 +305,29 @@ public class Window {
 	 * @return Icon format of the image.
 	 * @throws IOException
 	 */
-	public Icon getImageIcn(String imagePath) throws IOException {
+	public Icon getInternalImageIcn(String imagePath) throws IOException {
 		Image img = ImageIO.read(Window.class.getResource(imagePath));
+		ImageIcon icn = new ImageIcon(img);
+		return icn;
+	}
+
+	/**
+	 * Attempts to load an image from an external directory.
+	 * 
+	 * @param imagePath
+	 * @return
+	 * @throws IOException
+	 */
+	public Icon getExternalImageIcn(String imagePath) throws IOException {
+		p.log("Attempting to load image " + imagePath + " from " + dir.toString());
+		Image img;
+		try {
+			img = ImageIO.read(new File(dir.toString() + "/images/" + imagePath));
+		} catch (IOException e) {
+			p.log(1, "Image '" + imagePath + "' was not found. This error is on the pack creators hands.");
+			img = ImageIO.read(Window.class.getResource(imagePath));
+			e.printStackTrace();
+		}
 		ImageIcon icn = new ImageIcon(img);
 		return icn;
 	}
@@ -341,7 +371,7 @@ public class Window {
 
 		if (c.getBoolean("sep")) {
 			frmPoniiPic.dispose();
-			Convert("Ponii Program 4.0", 1, 0, 0);
+			Convert(name, 1, 0, 0);
 			frmPoniiPic.setVisible(true);
 			frmPoniiPicCont.setVisible(true);
 			int r = c.getInt("bgr"), g = c.getInt("bgg"), b = c.getInt("bgb");
@@ -388,7 +418,7 @@ public class Window {
 		frmPoniiPic = new JFrame();
 		frmPoniiPic.getContentPane().setBackground(SystemColor.window);
 		frmPoniiPic
-				.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("/DevTSK/Entity/images/ikon.png")));
+				.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("/DevTSK/Entity/files/ikon.png")));
 		frmPoniiPic.setTitle(n + " Picture Window");
 		frmPoniiPic.setBackground(SystemColor.window);
 		frmPoniiPic.setResizable(false);
@@ -399,7 +429,7 @@ public class Window {
 			frmPoniiPic.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		} else {
 			try {
-				throw new Exception("Invalad Close Opperation");
+				throw new Exception("Invalid Close Operation");
 			} catch (Exception e) {
 				e.printStackTrace();
 				frmPoniiPic.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -410,7 +440,7 @@ public class Window {
 		frmPoniiPicCont = new JFrame();
 		frmPoniiPicCont.getContentPane().setBackground(SystemColor.window);
 		frmPoniiPicCont
-				.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("/DevTSK/Entity/images/ikon.png")));
+				.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("/DevTSK/Entity/files/ikon.png")));
 		frmPoniiPicCont.setTitle(n + " Control Window");
 		frmPoniiPicCont.setBackground(SystemColor.window);
 		frmPoniiPicCont.setResizable(false);
