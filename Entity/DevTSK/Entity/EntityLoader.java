@@ -27,16 +27,30 @@ public class EntityLoader {
 
 	private final File WORKING_DIR;
 
-	private static final String[] commandsyntax = new String[] { "Color <R> <G> <B>", "InputColor <R> <G> <B>",
-			"OutputColor <R> <G> <B>", "OutputTextColor <R> <G> <B>", "InputTextColor <R> <G> <B>", "Exit",
-			"last / l / lastcmd", "cfg / config", "listall", "listalldna", "info <entity name>", "dir",
+	private static final String[] commandsyntax = new String[] { "Color <R> <G> <B>",
+			"InputColor <R> <G> <B>",
+			"OutputColor <R> <G> <B>",
+			"OutputTextColor <R> <G> <B>",
+			"InputTextColor <R> <G> <B>",
+			"Exit",
+			"last / l / lastcmd",
+			"cfg / config",
+			"listall",
+			"info <entity name>",
+			"dir",
 	};
 
-	private static final String[] commandexpl = new String[] { "Changes Background Color", "Changes input box color",
-			"Changes outputbox color", "Changes outputbox text color", "Changes input box text color",
-			"Exit the program", "re-inputs last given command into the input box for editing or re-execution",
-			"saves color scheme to config file : Poniconfig.cfg", "lists all defined entities",
-			"gives general on the given entity type", "print the current working directory",
+	private static final String[] commandexpl = new String[] { "Changes Background Color",
+			"Changes input box color",
+			"Changes outputbox color",
+			"Changes outputbox text color",
+			"Changes input box text color",
+			"Exit the program",
+			"re-inputs last given command into the input box for editing or re-execution",
+			"saves color scheme to config file : Poniconfig.cfg",
+			"lists all defined entities",
+			"Gives general on the given entity type",
+			"Print the current working directory",
 	};
 
 	private static final String[] commands = new String[] { "Colour", "Color", "InputColour", "InputColor",
