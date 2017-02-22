@@ -319,17 +319,21 @@ public class Window {
 	 * @throws IOException
 	 */
 	public Icon getExternalImageIcn(String imagePath) throws IOException {
+
 		p.log("Attempting to load image " + imagePath + " from " + dir.toString());
 		Image img;
 		try {
 			img = ImageIO.read(new File(dir.toString() + "/images/" + imagePath));
 		} catch (IOException e) {
 			p.log(1, "Image '" + imagePath + "' was not found. This error is on the pack creators hands.");
-			img = ImageIO.read(Window.class.getResource(imagePath));
-			e.printStackTrace();
+			img = ImageIO.read(Window.class.getResource("/DevTSK/Entity/files/null.png"));
+			p.log(2, e.getMessage());
+			for (StackTraceElement s : e.getStackTrace())
+				p.log(2, s.toString());
 		}
 		ImageIcon icn = new ImageIcon(img);
 		return icn;
+
 	}
 
 	/**

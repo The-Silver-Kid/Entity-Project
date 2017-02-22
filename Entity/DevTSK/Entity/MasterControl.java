@@ -44,6 +44,8 @@ public class MasterControl {
 
 	private static LoggerPro p = new LoggerPro(new String[] { "-", "#", "X" }, LoggerPro.FILE_AND_CONSOLE);
 
+	private static Offset off = new Offset(0);
+
 	public static void main(String[] args) {
 		String title = "Entity Project";
 
@@ -74,16 +76,33 @@ public class MasterControl {
 			} catch (Exception e) {
 				p.log(2, "Something went wrong whilst trying to read packInfo.bin");
 				p.log(2, e.getMessage());
+				for (StackTraceElement s : e.getStackTrace())
+					p.log(2, s.toString());
 			}
 		} else {
 			p.log(2, "No packInfo.bin found. Issues may occur!");
 		}
 
 		p.log("Attempting to load files.");
-		//TODO : Create Charset from files
+
+		GsonBuilder bldr = new GsonBuilder();
+		bldr.registerTypeAdapter(Entity.class, new EntityAdapter());
+		Gson g = bldr.create();
+
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(new File(f.getAbsolutePath() + "/Offset.json")));
+			off = g.fromJson(br, Offset.class);
+			compDay = off.getDay();
+		} catch (FileNotFoundException e) {
+			p.log(2, "Something went wrong trying to load the offset date. Continuing without.");
+			p.log(2, e.getMessage());
+			for (StackTraceElement s : e.getStackTrace())
+				p.log(2, s.toString());
+		}
+
 		Entity[] OC = new Entity[] {};
 		try {
-			OC = deserializeJSONFiles(f);
+			OC = deserializeJSONFiles(f, g);
 		} catch (Exception e1) {
 			p.log(2, "Something went wrong in loading entities! Cannot Continue");
 			p.log(2, e1.getMessage());
@@ -92,7 +111,7 @@ public class MasterControl {
 			System.exit(1);
 		}
 
-		h = new EntityLoader(OC, new Day(), p, f);
+		h = new EntityLoader(OC, compDay, p, f);
 
 		File ff = new File(f.getAbsolutePath() + "/Images/");
 		if (!ff.exists())
@@ -116,7 +135,7 @@ public class MasterControl {
 		method.invoke(ClassLoader.getSystemClassLoader(), new Object[] { file.toURI().toURL() });
 	}
 
-	private static Entity[] deserializeJSONFiles(File f) throws Exception {
+	private static Entity[] deserializeJSONFiles(File f, Gson g) throws Exception {
 		if (!f.exists())
 			f.mkdirs();
 		if (f.exists() && f.isDirectory()) {
@@ -127,7 +146,7 @@ public class MasterControl {
 				}
 			});
 
-			recurse(dirs, 3, f);
+			recurse(dirs, 3, f, g);
 
 			Entity[] ret = new Entity[list.size()];
 			for (int i = 0; i < list.size(); i++)
@@ -140,12 +159,12 @@ public class MasterControl {
 		}
 	}
 
-	private static void recurse(String[] strs, int i, File f) throws FileNotFoundException {
+	private static void recurse(String[] strs, int i, File f, Gson gs) throws FileNotFoundException {
 		if (i < 0)
 			return;
 		for (String s : strs) {
 			File g = new File(f.getAbsolutePath() + "/" + s);
-			Entity[] es = findEntity(g);
+			Entity[] es = findEntity(g, gs);
 			for (Entity e : es)
 				list.add(e);
 			String[] dirs = g.list(new FilenameFilter() {
@@ -153,15 +172,11 @@ public class MasterControl {
 					return (new File(current, name).isDirectory() && !new File(current, name).isHidden());
 				}
 			});
-			recurse(dirs, i - 1, g);
+			recurse(dirs, i - 1, g, gs);
 		}
 	}
 
-	private static Entity[] findEntity(File f) throws FileNotFoundException {
-		GsonBuilder bldr = new GsonBuilder();
-		bldr.registerTypeAdapter(Entity.class, new EntityAdapter());
-		Gson g = bldr.create();
-
+	private static Entity[] findEntity(File f, Gson g) throws FileNotFoundException {
 		FileFilter ff = new FileFilter(".json");
 		File[] jsonFiles = f.listFiles(ff);
 		Entity[] ret = new Entity[] {};

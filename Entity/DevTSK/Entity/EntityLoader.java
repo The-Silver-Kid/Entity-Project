@@ -450,8 +450,10 @@ public class EntityLoader {
 		MasterControl.poni.println(OC[i].toString(compDay));
 
 		try {
-			MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getExternalImageIcn(OC[i].getImagePath()));
-			MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getExternalImageIcn(OC[i].getAltImagePath()));
+			if (!OC[i].getImagePath().equalsIgnoreCase("null.png"))
+				MasterControl.poni.lblPoniiPic.setIcon(MasterControl.poni.getExternalImageIcn(OC[i].getImagePath()));
+			if (!OC[i].getAltImagePath().equalsIgnoreCase("null.png"))
+				MasterControl.poni.lblCMPic.setIcon(MasterControl.poni.getExternalImageIcn(OC[i].getAltImagePath()));
 		} catch (IOException e) {
 			this.logbook.log(2, "An error occurred while trying to load an image.");
 			this.logbook.log(2, e.getMessage());
