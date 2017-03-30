@@ -19,8 +19,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.TabSet;
+import javax.swing.text.TabStop;
 import DevTSK.Util.FileDetect;
 import DevTSK.Util.LoggerPro;
 import DevTSK.Util.DAG.Config;
@@ -40,7 +44,7 @@ public class Window {
 	public JLabel lblPoniiPic;
 	public JLabel lblCMPic;
 	public JTextField lblTextArea;
-	public JTextArea lblInfo;
+	public JTextPane lblInfo;
 	public JScrollPane loltest;
 	public JButton in;
 	public String handler = "";
@@ -52,6 +56,8 @@ public class Window {
 	private String name;
 
 	private File dir;
+
+	private TabSet tabs;
 
 	/**
 	 * Sets up the windows based on various input variables and configuration.
@@ -74,6 +80,9 @@ public class Window {
 	 * @throws IOException
 	 */
 	public Window(String n, int close, int x, int y, int CharRPWin, EntityLoader h, LoggerPro p, File dir) throws ConfigException, IOException {
+
+		TabStop[] tstops = new TabStop[] { new TabStop(220), new TabStop(280), /*new TabStop(150)*/ };
+		tabs = new TabSet(tstops);
 
 		el = h;
 
@@ -122,14 +131,18 @@ public class Window {
 			lblTextArea.setBounds(10, 710, 580, 20);
 			frmPoniiPic.getContentPane().add(lblTextArea);
 
-			lblInfo = new JTextArea();
-			lblInfo.setWrapStyleWord(true);
+			lblInfo = new JTextPane();
+			//lblInfo.setWrapStyleWord(true);
 			lblInfo.setToolTipText("Information box");
-			lblInfo.setLineWrap(true);
+			//lblInfo.setLineWrap(true);
 			lblInfo.setText("");
 			lblInfo.setBounds(10, 740, 670, 120);
 			lblInfo.setEditable(false);
 			frmPoniiPic.getContentPane().add(lblInfo);
+
+			Style style = lblInfo.getLogicalStyle();
+			StyleConstants.setTabSet(style, tabs);
+			lblInfo.setLogicalStyle(style);
 
 			loltest = new JScrollPane(lblInfo);
 			loltest.setBounds(10, 740, 670, 120);
@@ -193,14 +206,18 @@ public class Window {
 			lblTextArea.setBounds(10, 10, 580, 20);
 			frmPoniiPicCont.getContentPane().add(lblTextArea);
 
-			lblInfo = new JTextArea();
-			lblInfo.setWrapStyleWord(true);
+			lblInfo = new JTextPane();
+			//lblInfo.setWrapStyleWord(true);
 			lblInfo.setToolTipText("Information box");
-			lblInfo.setLineWrap(true);
+			//lblInfo.setLineWrap(true);
 			lblInfo.setText("");
 			lblInfo.setBounds(10, 40, 670, 420);
 			lblInfo.setEditable(false);
 			frmPoniiPicCont.getContentPane().add(lblInfo);
+
+			Style style = lblInfo.getLogicalStyle();
+			StyleConstants.setTabSet(style, tabs);
+			lblInfo.setLogicalStyle(style);
 
 			loltest = new JScrollPane(lblInfo);
 			loltest.setBounds(lblInfo.getBounds());
@@ -466,14 +483,18 @@ public class Window {
 		lblTextArea.setBounds(10, 10, 580, 20);
 		frmPoniiPicCont.getContentPane().add(lblTextArea);
 
-		lblInfo = new JTextArea();
-		lblInfo.setWrapStyleWord(true);
+		lblInfo = new JTextPane();
+		//lblInfo.setWrapStyleWord(true);
 		lblInfo.setToolTipText("Information box");
-		lblInfo.setLineWrap(true);
+		//lblInfo.setLineWrap(true);
 		lblInfo.setText("");
 		lblInfo.setBounds(10, 40, 670, 420);
 		lblInfo.setEditable(false);
 		frmPoniiPicCont.getContentPane().add(lblInfo);
+
+		Style style = lblInfo.getLogicalStyle();
+		StyleConstants.setTabSet(style, tabs);
+		lblInfo.setLogicalStyle(style);
 
 		loltest = new JScrollPane(lblInfo);
 		loltest.setBounds(lblInfo.getBounds());
