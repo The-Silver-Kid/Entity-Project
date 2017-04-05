@@ -1,12 +1,11 @@
 package DevTSK.Entity;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import DevTSK.Entity.Commands.Command;
 import DevTSK.Util.Day;
 import DevTSK.Util.LoggerPro;
-import DevTSK.Util.StringWriter;
 import DevTSK.Util.DAG.ConfigException;
 
 /**
@@ -18,47 +17,18 @@ import DevTSK.Util.DAG.ConfigException;
  */
 public class EntityLoader {
 
-	private static String lastCmd, name;
+	public String lastCmd;
+	public String name;
 	private static String[] sl;
 
-	private final Day compDay;
+	public final Day compDay;
 
 	private static FileOutputStream send;
 
-	private final File WORKING_DIR;
+	public final File WORKING_DIR;
 
-	private static final String[] commandsyntax = new String[] { "Color <R> <G> <B>",
-			"InputColor <R> <G> <B>",
-			"OutputColor <R> <G> <B>",
-			"OutputTextColor <R> <G> <B>",
-			"InputTextColor <R> <G> <B>",
-			"Exit",
-			"last / l / lastcmd",
-			"cfg / config",
-			"listall",
-			"info <entity name>",
-			"dir",
-	};
-
-	private static final String[] commandexpl = new String[] { "Changes Background Color",
-			"Changes input box color",
-			"Changes outputbox color",
-			"Changes outputbox text color",
-			"Changes input box text color",
-			"Exit the program",
-			"re-inputs last given command into the input box for editing or re-execution",
-			"saves color scheme to config file : Poniconfig.cfg",
-			"lists all defined entities",
-			"Gives general on the given entity type",
-			"Print the current working directory",
-	};
-
-	private static final String[] commands = new String[] { "Colour", "Color", "InputColour", "InputColor",
-			"OutputColour", "OutputColor", "Exit", "OutputTextColor", "InputTextColor", "OutputTextColour",
-			"InputTextColour", "errorcheck", "breed", "last", "l", "lastcmd", "cfg", "config",
-			"listall", "listalldna", "info", "dir", "help", "dump", "wip" };
-
-	private static final String[] modes = new String[] { "0", "1", "2" };
+	public final Command[] commands;
+	public final int commandsHidden;
 
 	private LoggerPro logbook;
 
@@ -74,13 +44,19 @@ public class EntityLoader {
 	 * @param Day
 	 *            Day used for comparison
 	 */
-	public EntityLoader(Entity[] o, Day d, LoggerPro logbook, File f) {
+	public EntityLoader(Entity[] o, Day d, LoggerPro logbook, File f, Command[] registeredCommands) {
 		WORKING_DIR = f;
 		OC = o;
 		compDay = d;
 		this.logbook = logbook;
 		this.logbook.log("Constructed EntityLoader");
 		this.logbook.log("Setting date to : " + compDay.toString(true));
+		this.commands = registeredCommands;
+		int t = 0;
+		for (Command com : commands)
+			if (com.isHidden())
+				t++;
+		commandsHidden = t;
 	}
 
 	/**
@@ -106,11 +82,12 @@ public class EntityLoader {
 		if (handler == -1)
 			this.logbook.log("Input : " + s + " Was not an Entity. Checking if command...");
 
-		for (int i = 0; i < commands.length; i++) {
-			if (commands[i].equalsIgnoreCase(sl[0])) {
-				controlVar = true;
+		for (int o = 0; o < commands.length; o++)
+			for (int i = 0; i < commands[o].getTokens().length; i++) {
+				if (commands[o].getTokens()[i].equalsIgnoreCase(sl[0])) {
+					controlVar = true;
+				}
 			}
-		}
 
 		if (!controlVar && handler == -1)
 			this.logbook.log("Input : " + sl[0] + " Was not a command. Displaying Help.");
@@ -158,16 +135,20 @@ public class EntityLoader {
 		String cmd = s;
 		String[] sl = cmd.split("\\s+");
 		this.logbook.log("Attempting execution of command : " + sl[0]);
-		if (sl[0].equalsIgnoreCase("Exit")) {
+		for (Command com : commands)
+			for (int i = 0; i < com.getTokens().length; i++)
+				if (com.getTokens()[i].equalsIgnoreCase(sl[0]))
+					com.run(OC, logbook, sl);
+		/*(if (sl[0].equalsIgnoreCase("Exit")) {
 			this.logbook.log(1, "System is shutting down!");
 			this.logbook.killStream();
 			System.exit(0);
-		}
-		if (sl[0].equalsIgnoreCase("ErrorCheck")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("ErrorCheck")) {
 			this.logbook.log(1, "Attempted to run the stub command 'ErrorCheck'.");
 			this.logbook.log(1, "This command does nothing. But is required to get the system running.");
 		}
-		if (sl[0].equalsIgnoreCase("Color") || sl[0].equalsIgnoreCase("Colour")) {
+		/*if (sl[0].equalsIgnoreCase("Color") || sl[0].equalsIgnoreCase("Colour")) {
 			if (sl.length == 4) {
 				int r, g, b;
 				r = Integer.parseInt(sl[1]);
@@ -177,8 +158,8 @@ public class EntityLoader {
 				this.logbook.log("Command " + sl[0] + " completed successfully.");
 			} else
 				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. Required args not met.");
-		}
-		if (sl[0].equalsIgnoreCase("InputColor") || sl[0].equalsIgnoreCase("InputColour")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("InputColor") || sl[0].equalsIgnoreCase("InputColour")) {
 			if (sl.length == 4) {
 				int r, g, b;
 				r = Integer.parseInt(sl[1]);
@@ -188,8 +169,8 @@ public class EntityLoader {
 				this.logbook.log("Command " + sl[0] + " completed successfully.");
 			} else
 				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. Required args not met.");
-		}
-		if (sl[0].equalsIgnoreCase("OutputColor") || sl[0].equalsIgnoreCase("OutputColour")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("OutputColor") || sl[0].equalsIgnoreCase("OutputColour")) {
 			if (sl.length == 4) {
 				int r, g, b;
 				r = Integer.parseInt(sl[1]);
@@ -199,8 +180,8 @@ public class EntityLoader {
 				this.logbook.log("Command " + sl[0] + " completed successfully.");
 			} else
 				this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. Required args not met.");
-		}
-		if (sl[0].equalsIgnoreCase("OutputTextColor") || sl[0].equalsIgnoreCase("OutputTextColour")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("OutputTextColor") || sl[0].equalsIgnoreCase("OutputTextColour")) {
 			if (sl.length == 4) {
 				int r, g, b;
 				r = Integer.parseInt(sl[1]);
@@ -221,8 +202,9 @@ public class EntityLoader {
 				this.logbook.log("Command " + sl[0] + " completed successfully.");
 			} else
 				this.logbook.log(1, "Command " + sl[0] + " failed to complete successfully. Required args not met.");
-		}
-		if (sl[0].equalsIgnoreCase("breed")) {
+		}*/
+		//TODO MOVE TO RADON SET CLASSES AS IT IS SPECIFIC!
+		/*if (sl[0].equalsIgnoreCase("breed")) {
 			String say = "Syntax is breed <mode> <Father> <Mother> [times]";
 			Breeder b = new Breeder(Breeder.INTACT_COLOURS);
 			Boolean isValidMode = true;
@@ -263,7 +245,7 @@ public class EntityLoader {
 				if (sl[1].equals("2"))
 					b = new Breeder(Breeder.RANDOM);
 				if (f != -1 && m != -1) {
-
+		
 					say = b.breed(OC[f], OC[m]);
 					if (sl.length == 5) {
 						say = "";
@@ -281,8 +263,8 @@ public class EntityLoader {
 			else
 				this.logbook.log("Command " + sl[0] + " completed successfully.");
 			MasterControl.poni.lblInfo.setText(say);
-		}
-		if (sl[0].equalsIgnoreCase("listall") || sl[0].equalsIgnoreCase("listalldna")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("listall") || sl[0].equalsIgnoreCase("listalldna")) {
 			MasterControl.poni.printCl();
 			if (sl[0].equalsIgnoreCase("listall")) {
 				MasterControl.poni.println("Acceptable OC/NonOC Ponii Names: " + OC.length + "\n");
@@ -298,18 +280,18 @@ public class EntityLoader {
 					} catch (Exception e) {
 					}
 				}
-
+		
 			}
 			this.logbook.log("Command " + sl[0] + " completed successfully.");
-		}
-		if (sl[0].equalsIgnoreCase("last") || sl[0].equalsIgnoreCase("lastcmd") || sl[0].equalsIgnoreCase("l")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("last") || sl[0].equalsIgnoreCase("lastcmd") || sl[0].equalsIgnoreCase("l")) {
 			MasterControl.poni.lblTextArea.setText(lastCmd);
 			this.logbook.log("Command " + sl[0] + " completed successfully.");
-		}
-		if (sl[0].equalsIgnoreCase("cfg") || sl[0].equalsIgnoreCase("config")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("cfg") || sl[0].equalsIgnoreCase("config")) {
 			Boolean good = true;
 			System.out.println("Saving Configuration...");
-
+		
 			byte[] tst = new byte[] {};
 			String strnj = "version = 2.0;\n\n" + "bgr = "
 					+ MasterControl.poni.frmPoniiPic.getContentPane().getBackground().getRed() + ";\n" + "bgg = "
@@ -329,7 +311,7 @@ public class EntityLoader {
 					+ MasterControl.poni.lblInfo.getForeground().getBlue() + ";\n\n" + "sep = " + "true;";
 			// + "frame = " + framew + ";";
 			tst = strnj.getBytes();
-
+		
 			try {
 				FileOutputStream send = new FileOutputStream("./PoniiConfig.cfg");
 				send.write(tst);
@@ -343,8 +325,8 @@ public class EntityLoader {
 			}
 			if (good)
 				this.logbook.log("Command " + sl[0] + " completed successfully.");
-		}
-		if (sl[0].equalsIgnoreCase("info")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("info")) {
 			if (sl.length < 2 || sl.length > 2) {
 				MasterControl.poni.printCl();
 				MasterControl.poni.println(
@@ -371,19 +353,19 @@ public class EntityLoader {
 					this.logbook.log(2, "Command " + sl[0] + " failed to complete successfully. " + sl[1] + " is not an entity.");
 				}
 			}
-		}
-		if (sl[0].equalsIgnoreCase("charset")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("charset")) {
 			MasterControl.poni.printCl();
 			MasterControl.poni.println(name);
 			this.logbook.log("Command " + sl[0] + " completed successfully.");
-		}
-		if (sl[0].equalsIgnoreCase("help")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("help")) {
 			MasterControl.poni.printCl();
 			for (int i = 0; i < commandsyntax.length; i++)
 				MasterControl.poni.println(commandsyntax[i] + " : " + commandexpl[i]);
 			this.logbook.log("Command " + sl[0] + " completed successfully.");
-		}
-		if (sl[0].equalsIgnoreCase("dump")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("dump")) {
 			String og = "Successfully Dumped Entity names and ID numbers to EntityList.txt";
 			String out = "";
 			for (int i = 0; i < OC.length; i++) {
@@ -403,8 +385,8 @@ public class EntityLoader {
 			MasterControl.poni.println(og);
 			if (!og.contains("wrong"))
 				this.logbook.log("Command " + sl[0] + " completed successfully.");
-		}
-		if (sl[0].equalsIgnoreCase("WIP")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("WIP")) {
 			String WIPEntitiis = "Entities that need work done:\n",
 					noImage = "1 = No Alternate Image\n2 = No Main Image\n3 = No images\nEntitiis that have no image:\n",
 					noDNA = "Entities without DNA:\n";
@@ -423,9 +405,9 @@ public class EntityLoader {
 					noDNA = noDNA + i + " : " + OC[i].getAltName() + "\n";
 			}
 			WIPEntitiis = WIPEntitiis + "\n" + noImage + "\n" + noDNA;
-
+		
 			String og = "Success!";
-
+		
 			StringWriter sw = new StringWriter();
 			try {
 				sw.Write(WIPEntitiis, new File(WORKING_DIR + "/WIPList.txt"), true);
@@ -440,12 +422,12 @@ public class EntityLoader {
 				this.logbook.log("Command " + sl[0] + " completed successfully.");
 			MasterControl.poni.printCl();
 			MasterControl.poni.println(og);
-		}
-		if (sl[0].equalsIgnoreCase("dir")) {
+		}*/
+		/*if (sl[0].equalsIgnoreCase("dir")) {
 			MasterControl.poni.printCl();
 			MasterControl.poni.println(WORKING_DIR.getAbsolutePath());
 			this.logbook.log("Command " + sl[0] + " completed successfully.");
-		}
+		}*/
 	}
 
 	/**
@@ -488,9 +470,13 @@ public class EntityLoader {
 		for (int i = 0; i < OC.length; i++) {
 			XD = XD + "\n" + OC[i].getName() + "\tAKA\t" + OC[i].getAltName();
 		}
-		XD = XD + "\n\nApplicable commands : " + commandexpl.length + "\n";
-		for (int i = 0; i < commandexpl.length; i++)
-			XD = XD + "\n" + commandsyntax[i] + " : " + commandexpl[i];
+		XD = XD + "\n\nApplicable commands : " + (commands.length - commandsHidden) + "\nRGB Values are in decimal and range from 0-255\n";
+		int t = 1;
+		for (int i = 0; i < commands.length; i++)
+			if (!commands[i].isHidden()) {
+				XD = XD + "\n" + t + ". " + commands[i].getSyntax() + "\t" + commands[i].getHelp();
+				t++;
+			}
 		return XD;
 	}
 

@@ -24,6 +24,22 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import DevTSK.Entity.Commands.Command;
+import DevTSK.Entity.Commands.Default.BGColor;
+import DevTSK.Entity.Commands.Default.Charset;
+import DevTSK.Entity.Commands.Default.ConfigurationSave;
+import DevTSK.Entity.Commands.Default.Dir;
+import DevTSK.Entity.Commands.Default.Dump;
+import DevTSK.Entity.Commands.Default.Exit;
+import DevTSK.Entity.Commands.Default.Help;
+import DevTSK.Entity.Commands.Default.InColor;
+import DevTSK.Entity.Commands.Default.InTxtColor;
+import DevTSK.Entity.Commands.Default.Info;
+import DevTSK.Entity.Commands.Default.LastRun;
+import DevTSK.Entity.Commands.Default.ListAll;
+import DevTSK.Entity.Commands.Default.OtColor;
+import DevTSK.Entity.Commands.Default.OtTxtColor;
+import DevTSK.Entity.Commands.Default.WIP;
 import DevTSK.Util.Day;
 import DevTSK.Util.LoggerPro;
 import DevTSK.Util.DAG.ConfigException;
@@ -46,7 +62,11 @@ public class MasterControl {
 
 	private static Offset off = new Offset(0);
 
+	private static Command[] cmands;
+
 	public static void main(String[] args) {
+		ArrayList<Command> coms = new ArrayList<>();
+
 		String title = "Entity Project";
 
 		File f = findDir();
@@ -111,7 +131,29 @@ public class MasterControl {
 			System.exit(1);
 		}
 
-		h = new EntityLoader(OC, compDay, p, f);
+		//Adding default commands
+		coms.add(new Help());
+		coms.add(new BGColor());
+		coms.add(new InColor());
+		coms.add(new InTxtColor());
+		coms.add(new OtColor());
+		coms.add(new OtTxtColor());
+		coms.add(new Charset());
+		coms.add(new ConfigurationSave());
+		coms.add(new Dir());
+		coms.add(new Dump());
+		coms.add(new Info());
+		coms.add(new LastRun());
+		coms.add(new ListAll());
+		coms.add(new WIP());
+		coms.add(new Exit());
+
+		//TODO add custom plugins from external jar
+
+		cmands = new Command[coms.size()];
+		coms.toArray(cmands);
+
+		h = new EntityLoader(OC, compDay, p, f, cmands);
 
 		File ff = new File(f.getAbsolutePath() + "/Images/");
 		if (!ff.exists())
