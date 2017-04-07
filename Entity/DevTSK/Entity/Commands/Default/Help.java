@@ -27,7 +27,7 @@ public class Help implements Command {
 
 	@Override
 	public String getHelp() {
-		return "Returns a list of MasterControl.poni.el.commands and their functions.";
+		return "Returns a list of Commands and their functions.";
 	}
 
 	@Override
