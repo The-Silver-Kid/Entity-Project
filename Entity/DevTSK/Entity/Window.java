@@ -368,7 +368,7 @@ public class Window {
 	 * @throws ConfigException
 	 */
 	public void punch() throws ConfigException {
-		if (new Config("./PoniiConfig.cfg").getDouble("version") < 2.0) {
+		if (new Config("./EntityConfig.cfg").getDouble("version") < 2.0) {
 			printCl();
 			println("If you are seeing this something went wrong"
 					+ "\nIt is probably my fault...");
@@ -384,11 +384,11 @@ public class Window {
 	 */
 	public void setupConfig() throws ConfigException, IOException {
 		p.log("Setting up window configuration.");
-		FileDetect fd = new FileDetect("./PoniiConfig.cfg");
+		FileDetect fd = new FileDetect("./EntityConfig.cfg");
 
 		if (!fd.Detect())
 			el.extractConfig();
-		Config c = new Config("./PoniiConfig.cfg");
+		Config c = new Config("./EntityConfig.cfg");
 
 		if (c.getBoolean("sep")) {
 			frmPoniiPic.dispose();

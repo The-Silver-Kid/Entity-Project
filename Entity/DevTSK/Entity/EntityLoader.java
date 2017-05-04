@@ -492,8 +492,8 @@ public class EntityLoader {
 			System.out.println("Extracting : " + "Configuration File");
 			File f = new File("./");
 			f.mkdir();
-			send = new FileOutputStream(f + "/" + "PoniiConfig.cfg");
-			String charToExtract = "PoniiConfig.cfg";
+			send = new FileOutputStream(f + "/" + "EntityConfig.cfg");
+			String charToExtract = "EntityConfig.cfg";
 			byte[] out = new byte[EntityLoader.class.getResourceAsStream("/DevTSK/Entity/files/" + charToExtract).available()];
 			EntityLoader.class.getResourceAsStream("/DevTSK/Entity/files/" + charToExtract).read(out);
 			send.write(out);
