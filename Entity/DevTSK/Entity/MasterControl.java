@@ -65,13 +65,13 @@ public class MasterControl {
 	private static Command[] cmands;
 
 	public static void main(String[] args) {
-		ArrayList<Command> coms = new ArrayList<>();
+		ArrayList<Command> coms = new ArrayList<>(), plugs = new ArrayList<>();
 
 		String title = "Entity Project";
 
 		File f = findDir();
 
-		p.log("Loading external classes");
+		p.log("Loading external Entity classes");
 		try {
 			findClasses(f);
 		} catch (NullPointerException e) {
@@ -100,7 +100,7 @@ public class MasterControl {
 					p.log(2, s.toString());
 			}
 		} else {
-			p.log(2, "No packInfo.bin found. Issues may occur!");
+			p.log(2, "No packInfo.bin found. This may be bad!");
 		}
 
 		p.log("Attempting to load files.");
@@ -149,6 +149,19 @@ public class MasterControl {
 		coms.add(new Exit());
 
 		//TODO add custom plugins from external jar
+
+		p.log("Attempting to load pluginable commands");
+		try {
+			plugs = plugins(f);
+		} catch (Exception e) {
+			p.log(2, "Something went wrong loading one or more plugins.");
+			p.log(2, "Certain plugins may be unavailable...");
+			p.log(2, e.getMessage());
+			for (StackTraceElement s : e.getStackTrace())
+				p.log(2, s.toString());
+		}
+		coms.addAll(plugs);
+		p.log("Pluginable command injection finished.");
 
 		cmands = new Command[coms.size()];
 		coms.toArray(cmands);
@@ -264,6 +277,38 @@ public class MasterControl {
 		choose.showDialog(null, "Open Directory");
 
 		return choose.getSelectedFile();
+	}
+
+	private static ArrayList<Command> plugins(File f) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		File master = new File(f.getAbsolutePath() + "/plugins");
+		p.log("Looking in " + master.getAbsolutePath() + " for plugins...");
+		ArrayList<Command> ret = new ArrayList<>();
+		if (master.exists()) {
+			FileFilter ff = new FileFilter(".jar");
+			File[] dirs = master.listFiles(ff);
+
+			p.log("Found " + dirs.length + " plugins in " + master.getAbsolutePath());
+
+			URLClassLoader cl;
+
+			for (File dir : dirs) {
+				p.log("Attempting to load " + dir.getName() + ".");
+				URL loadPath = dir.toURI().toURL();
+				URL[] classUrl = new URL[] { loadPath };
+
+				cl = new URLClassLoader(classUrl);
+
+				//TODO fix this
+
+				Class<?> loadedClass = cl.loadClass("Entity.Command");// must be in package.class name format
+				Command c = (Command) loadedClass.newInstance();
+				ret.add(c);
+			}
+			return ret;
+		} else {
+			p.log("Found 0 plugins in " + master.getAbsolutePath());
+			return ret;
+		}
 	}
 }
 
