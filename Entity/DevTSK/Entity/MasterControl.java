@@ -7,12 +7,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import javax.swing.JFileChooser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -73,7 +77,7 @@ public class MasterControl {
 
 		p.log("Loading external Entity classes");
 		try {
-			findClasses(f);
+			findClasses(f, "/Classes/", true);
 		} catch (NullPointerException e) {
 			p.log("User cancelled Entity Pack choosing... System will exit.");
 			System.exit(0);
@@ -247,8 +251,8 @@ public class MasterControl {
 		return ret;
 	}
 
-	private static void findClasses(File f) {
-		File dir = new File(f.getAbsolutePath() + "/classes/");
+	private static void findClasses(File f, String ext, Boolean announce) {
+		File dir = new File(f.getAbsolutePath() + ext);
 		if (!dir.exists())
 			dir.mkdirs();
 		if (dir.exists() && dir.isDirectory()) {
@@ -257,10 +261,12 @@ public class MasterControl {
 
 			for (int i = 0; i < classes.length; i++) {
 				try {
-					p.log("Attempting to load '" + classes[i].getName() + "'.");
+					if (announce)
+						p.log("Attempting to load '" + classes[i].getName() + "'.");
 					addSoftwareLibrary(classes[i]);
 				} catch (Exception e) {
-					p.log(2, "Error in loading class file '" + classes[i].getName() + "'.");
+					if (announce)
+						p.log(2, "Error in loading class file '" + classes[i].getName() + "'.");
 					p.log(2, e.getMessage());
 				}
 			}
@@ -279,31 +285,50 @@ public class MasterControl {
 		return choose.getSelectedFile();
 	}
 
-	private static ArrayList<Command> plugins(File f) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	private static ArrayList<Command> plugins(File f) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
 		File master = new File(f.getAbsolutePath() + "/plugins");
 		p.log("Looking in " + master.getAbsolutePath() + " for plugins...");
 		ArrayList<Command> ret = new ArrayList<>();
 		if (master.exists()) {
+
 			FileFilter ff = new FileFilter(".jar");
-			File[] dirs = master.listFiles(ff);
+			File[] fs = master.listFiles(ff);
 
-			p.log("Found " + dirs.length + " plugins in " + master.getAbsolutePath());
+			ArrayList<String> classNames = new ArrayList<String>();
 
-			URLClassLoader cl;
+			for (File fname : fs) {
 
-			for (File dir : dirs) {
-				p.log("Attempting to load " + dir.getName() + ".");
-				URL loadPath = dir.toURI().toURL();
-				URL[] classUrl = new URL[] { loadPath };
-
-				cl = new URLClassLoader(classUrl);
-
-				//TODO fix this
-
-				Class<?> loadedClass = cl.loadClass("Entity.Command");// must be in package.class name format
-				Command c = (Command) loadedClass.newInstance();
-				ret.add(c);
+				ZipInputStream zip = new ZipInputStream(new FileInputStream(fname));
+				for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+					if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+						// This ZipEntry represents a class. Now, what class does it represent?
+						String className = entry.getName().replace('/', '.'); // including ".class"
+						classNames.add(className.substring(0, className.length() - ".class".length()));
+					}
+				}
+				zip.close();
 			}
+
+			findClasses(f, "/plugins/", false);
+
+			//TODO fix this
+
+			for (int i = 0; i < classNames.size(); i++) {
+				Class<?> clazz = Class.forName(classNames.get(i));
+				try {
+					if (Command.class.isAssignableFrom(clazz)) {
+						Constructor<?> ctor = clazz.getConstructor();
+						Command obj = (Command) ctor.newInstance();
+						ret.add(obj);
+					}
+				} catch (Exception e) {
+					p.log(2, e.getMessage());
+					for (StackTraceElement s : e.getStackTrace())
+						p.log(2, s.toString());
+				}
+
+			}
+
 			return ret;
 		} else {
 			p.log("Found 0 plugins in " + master.getAbsolutePath());
