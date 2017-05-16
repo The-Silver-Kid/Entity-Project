@@ -24,6 +24,22 @@ public abstract class Entity {
 		return this;
 	}
 
+	public String getFather() {
+		return father;
+	}
+
+	public String getMother() {
+		return mother;
+	}
+
+	public Boolean getRawGender() {
+		return Gender;
+	}
+
+	public String[] getPartners() {
+		return kids;
+	}
+
 	public abstract String getInfo();
 
 	public abstract String getName();

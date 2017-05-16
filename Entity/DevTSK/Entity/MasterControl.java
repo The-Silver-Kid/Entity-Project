@@ -30,6 +30,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import DevTSK.Entity.Commands.Command;
 import DevTSK.Entity.Commands.Default.BGColor;
+import DevTSK.Entity.Commands.Default.Build;
 import DevTSK.Entity.Commands.Default.Charset;
 import DevTSK.Entity.Commands.Default.ConfigurationSave;
 import DevTSK.Entity.Commands.Default.Dir;
@@ -151,6 +152,7 @@ public class MasterControl {
 		coms.add(new ListAll());
 		coms.add(new WIP());
 		coms.add(new Exit());
+		coms.add(new Build());
 
 		//TODO add custom plugins from external jar
 
