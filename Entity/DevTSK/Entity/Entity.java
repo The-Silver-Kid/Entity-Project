@@ -7,7 +7,7 @@ public abstract class Entity {
 	protected int state = 0, kidammount = 0;
 	protected String name = "Empty", altName = "Empty", description = "Empty", mother = "Empty", father = "Empty", flag = "Empty", additionalInfo = "Empty", imagepath = "null.png", altimagepath = "null.png", colour = "Empty", anotherColour = "Empty";
 	protected DNA dna = new DNA();
-	protected String[] kids = null, with = null, marriedTo = null;
+	protected String[] kids = new String[0], with = new String[0], marriedTo = new String[0];
 	protected Day birthday;
 
 	public abstract String toString(Day offset);
@@ -37,7 +37,7 @@ public abstract class Entity {
 	}
 
 	public String[] getPartners() {
-		return kids;
+		return marriedTo;
 	}
 
 	public abstract String getInfo();

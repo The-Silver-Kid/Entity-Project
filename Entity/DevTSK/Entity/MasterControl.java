@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -69,12 +70,16 @@ public class MasterControl {
 
 	private static Command[] cmands;
 
+	private static JFrame empty;
+
 	public static void main(String[] args) {
 		ArrayList<Command> coms = new ArrayList<>(), plugs = new ArrayList<>();
 
 		String title = "Entity Project";
 
 		File f = findDir();
+		empty.dispose();
+		empty.setVisible(false);
 
 		p.log("Loading external Entity classes");
 		try {
@@ -153,8 +158,6 @@ public class MasterControl {
 		coms.add(new WIP());
 		coms.add(new Exit());
 		coms.add(new Build());
-
-		//TODO add custom plugins from external jar
 
 		p.log("Attempting to load pluginable commands");
 		try {
@@ -280,9 +283,12 @@ public class MasterControl {
 	}
 
 	private static File findDir() {
+		empty = new JFrame();
+		empty.setVisible(true);
 		JFileChooser choose = new JFileChooser();
 		choose.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		choose.showDialog(null, "Open Directory");
+		empty.add(choose);
 
 		return choose.getSelectedFile();
 	}
@@ -312,8 +318,6 @@ public class MasterControl {
 			}
 
 			findClasses(f, "/plugins/", false);
-
-			//TODO fix this
 
 			for (int i = 0; i < classNames.size(); i++) {
 				Class<?> clazz = Class.forName(classNames.get(i));
