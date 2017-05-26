@@ -8,8 +8,6 @@ import DevTSK.Util.LoggerPro;
 
 public class Build implements Command {
 
-	private ArrayList<Unit> onions = new ArrayList<>();
-
 	public Build() {
 	}
 
@@ -67,20 +65,33 @@ public class Build implements Command {
 		//sorts kids
 		try {
 			for (int i = 0; i < lst.size(); i++) {
-				if (true/*!(lst.get(i).ptn == null)*/) { // i dont know if i need anything here...
-					//check for mother and add to her units
+				Boolean doit = true;
+				//check for partner first
+				if (lst.get(i).g)
+					if (!(lst.get(i).ptn == null)) {
 
+						ArrayList<Integer> res = rcheck(lst, lst.get(i));
+						if (res.size() > 0)
+							doit = false;
+					}
+
+				//check for mother and add to her units
+				if (doit) {
 					ArrayList<Integer> result = rpcheck(lst, lst.get(i));
 					if (result.size() > 0) {
 						lst = radd(result, lst, lst.get(i));
+
+						//System.err.println("WILL BE REMOVING " + lst.get(i).name.toUpperCase());
 						lst.remove(i);
 						i--;
+
 					}
 				}
-
 			}
 
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			logbook.log(2, "Command " + sl[0] + " failed to complete successfully.");
 			logbook.log(2, e.getMessage());
 			logbook.log(2, e.toString());
@@ -90,9 +101,14 @@ public class Build implements Command {
 			MasterControl.poni.println("OH NOES!");
 			return 1;
 		}
+
+		//	MasterControl.poni.printCl();
+		//	MasterControl.poni.println(arrange(lst));
+
 		//sorts partners
 		try {
 			for (int i = 0; i < lst.size(); i++) {
+				System.err.println(lst.get(0).name.toLowerCase() + " : " + lst.get(i).name.toLowerCase() + " : " + i);
 				//Check gender
 				logbook.log("Checking Gender of " + lst.get(i).name);
 				if (lst.get(i).g) {
@@ -107,8 +123,10 @@ public class Build implements Command {
 						ArrayList<Integer> result = rcheck(lst, lst.get(i));
 						if (result.size() != 0) {
 							lst = radd(result, lst, lst.get(i));
+							//System.err.println("REMOVING " + lst.get(i).name.toUpperCase() + ":" + i);
 							lst.remove(i);
 							i--;
+
 						}
 					}
 				}
@@ -132,32 +150,32 @@ public class Build implements Command {
 
 	@SuppressWarnings("unchecked")
 	private ArrayList<Unit> radd(ArrayList<Integer> result, ArrayList<Unit> lst, Unit unit) throws Exception {
-		onions = lst;
+		ArrayList<Unit> onions = (ArrayList<Unit>) lst.clone();
 		ArrayList<Integer> ggm8 = (ArrayList<Integer>) result.clone();
 		ggm8.remove(0);
 		if (ggm8.size() > 0)
-			onions.set(result.get(0), raddh(result, unit, lst));
+			onions = (ArrayList<Unit>) raddh(result, unit, lst).clone();
 		else {
 			onions.get(result.get(0)).units.add(unit);
-			onions.set(result.get(0), onions.get(result.get(0)));
+			//onions.set(result.get(0), onions.get(result.get(0)));
 		}
 		return onions;
 	}
 
 	@SuppressWarnings("unchecked")
-	private Unit raddh(ArrayList<Integer> result, Unit unit, ArrayList<Unit> lst) throws Exception {
+	private ArrayList<Unit> raddh(ArrayList<Integer> result, Unit unit, ArrayList<Unit> lst) throws Exception {
 		ArrayList<Unit> lst2 = (ArrayList<Unit>) lst.clone();
 		ArrayList<Integer> res = (ArrayList<Integer>) result.clone();
 		if (result.size() > 1) {
 			res.remove(0);
-			lst2.set(result.get(0), raddh(res, unit, lst2.get(result.get(0)).units));
+			lst2.get(result.get(0)).units = (ArrayList<Unit>) raddh(res, unit, lst2.get(result.get(0)).units).clone();
 		} else if (result.size() == 1) {
 			lst2.get(result.get(0)).units.add(unit);
-			return lst2.get(result.get(0));
+			return lst2;
 		} else {
 			throw new Exception("Somehow the recursive function zeroed out.");
 		}
-		return lst2.get(result.get(0));
+		return lst2;
 	}
 
 	private ArrayList<Integer> rcheck(ArrayList<Unit> lst, Unit unit) {
@@ -201,6 +219,7 @@ public class Build implements Command {
 	private String rarr(String code, ArrayList<Unit> lst, int n) {
 		String ret = "";
 		for (int i = 0; i < lst.size(); i++) {
+			//System.err.println(lst.get(i).name.toUpperCase());
 			ret = ret + "\n" + code + lst.get(i).name;
 			if (lst.get(i).units.size() > 0) {
 				String space = "";
