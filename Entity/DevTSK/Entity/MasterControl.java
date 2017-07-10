@@ -45,6 +45,7 @@ import DevTSK.Entity.Commands.Default.LastRun;
 import DevTSK.Entity.Commands.Default.ListAll;
 import DevTSK.Entity.Commands.Default.OtColor;
 import DevTSK.Entity.Commands.Default.OtTxtColor;
+import DevTSK.Entity.Commands.Default.Today;
 import DevTSK.Entity.Commands.Default.WIP;
 import DevTSK.Util.Day;
 import DevTSK.Util.LoggerPro;
@@ -158,6 +159,7 @@ public class MasterControl {
 		coms.add(new WIP());
 		coms.add(new Exit());
 		coms.add(new Build());
+		coms.add(new Today());
 
 		p.log("Attempting to load pluginable commands");
 		try {
@@ -175,11 +177,21 @@ public class MasterControl {
 		cmands = new Command[coms.size()];
 		coms.toArray(cmands);
 
-		h = new EntityLoader(OC, compDay, p, f, cmands);
-
 		File ff = new File(f.getAbsolutePath() + "/Images/");
 		if (!ff.exists())
 			ff.mkdir();
+
+		for (Entity check : OC) {
+			File fff = new File(f.getAbsolutePath() + "/Images/" + check.getImagePath());
+			if (!fff.exists() && !check.getImagePath().equalsIgnoreCase("null.png"))
+				p.log(2, "Entity " + check.getAltName() + " has a specified image that doesnt exist!");
+			fff = new File(f.getAbsolutePath() + "/Images/" + check.getAltImagePath());
+			if (!fff.exists() && !check.getAltImagePath().equalsIgnoreCase("null.png"))
+				p.log(2, "Entity " + check.getAltName() + " has a specified alternate image that doesnt exist!");
+
+		}
+
+		h = new EntityLoader(OC, compDay, p, f, cmands);
 
 		try {
 			poni = new Window(title, 1, 0, 0, 0, h, p, f);

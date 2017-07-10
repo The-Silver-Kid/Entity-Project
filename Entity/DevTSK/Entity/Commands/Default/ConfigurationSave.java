@@ -58,7 +58,7 @@ public class ConfigurationSave implements Command {
 		tst = strnj.getBytes();
 
 		try {
-			FileOutputStream send = new FileOutputStream("./PoniiConfig.cfg");
+			FileOutputStream send = new FileOutputStream("./EntityConfig.cfg");
 			send.write(tst);
 			send.close();
 		} catch (IOException e) {
