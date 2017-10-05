@@ -172,7 +172,7 @@ public class MasterControl {
 				p.log(2, s.toString());
 		}
 		coms.addAll(plugs);
-		p.log("Pluginable command injection finished.");
+		p.log("Plugin-able command injection finished.");
 
 		cmands = new Command[coms.size()];
 		coms.toArray(cmands);

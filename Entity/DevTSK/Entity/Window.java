@@ -92,6 +92,8 @@ public class Window {
 
 		this.dir = dir;
 
+		//Honestly who uses the un-split window anymore? should i remove this?
+
 		if (CharRPWin == 0) {
 
 			frmPoniiPic = new JFrame();
@@ -157,6 +159,8 @@ public class Window {
 		}
 		if (CharRPWin == 1) {
 
+			int boxX = Toolkit.getDefaultToolkit().getScreenSize().width;
+
 			frmPoniiPic = new JFrame();
 			frmPoniiPic.getContentPane().setBackground(SystemColor.window);
 			frmPoniiPic
@@ -164,7 +168,8 @@ public class Window {
 			frmPoniiPic.setTitle(n + " Picture Window");
 			frmPoniiPic.setBackground(SystemColor.window);
 			frmPoniiPic.setResizable(false);
-			frmPoniiPic.setBounds(x, y, 700, 700);
+			frmPoniiPic.setBounds(x, y, 700 + (int) (((boxX - 1400) / 700) * 10), 700 + (int) (((boxX - 1400) / 700) * 10));
+			p.log("Setting window size to" + (700 + (int) (((boxX - 1400) / 700) * 10)));
 			if (close == 0) {
 				frmPoniiPic.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			} else if (close == 1) {
@@ -436,6 +441,15 @@ public class Window {
 	 *            y pos
 	 */
 	private void Convert(String n, int close, int x, int y) {
+
+		int boxX = Toolkit.getDefaultToolkit().getScreenSize().width;
+		//boxX = 3840;
+		int boxY = Toolkit.getDefaultToolkit().getScreenSize().height;
+		//boxY = 2160;
+		p.log("Loaded window size of " + boxX + "x" + boxY);
+
+		int funcY = (((boxY - 700) / 350) * 50);
+
 		frmPoniiPic = new JFrame();
 		frmPoniiPic.getContentPane().setBackground(SystemColor.window);
 		frmPoniiPic
@@ -443,7 +457,8 @@ public class Window {
 		frmPoniiPic.setTitle(n + " Picture Window");
 		frmPoniiPic.setBackground(SystemColor.window);
 		frmPoniiPic.setResizable(false);
-		frmPoniiPic.setBounds(x, y, 700, 700);
+		frmPoniiPic.setBounds(x, y, 700 + funcY, 700 + funcY);
+		p.log("Setting window size to " + (700 + funcY));
 		if (close == 0) {
 			frmPoniiPic.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		} else if (close == 1) {
@@ -465,16 +480,16 @@ public class Window {
 		frmPoniiPicCont.setTitle(n + " Control Window");
 		frmPoniiPicCont.setBackground(SystemColor.window);
 		frmPoniiPicCont.setResizable(false);
-		frmPoniiPicCont.setBounds(x + 700, y, 700, 500);
+		frmPoniiPicCont.setBounds(x + 700 + funcY, y, 700, 500);
 		frmPoniiPicCont.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frmPoniiPicCont.getContentPane().setLayout(null);
 
 		lblPoniiPic = new JLabel();
-		lblPoniiPic.setBounds(0, 0, 700, 700);
+		lblPoniiPic.setBounds(0, 0, 700 + funcY, 700 + funcY);
 		frmPoniiPic.getContentPane().add(lblPoniiPic);
 
 		lblCMPic = new JLabel();
-		lblCMPic.setBounds(350, 0, 350, 350);
+		lblCMPic.setBounds((700 + funcY) / 2, 0, 350 + (funcY / 2), 350 + (funcY / 2));
 		frmPoniiPic.getContentPane().add(lblCMPic);
 
 		lblTextArea = new JTextField();
