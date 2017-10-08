@@ -5,6 +5,7 @@ public class Configuration {
 	private int textSize, winSize = -1;
 	private int[] bgRGB, outFoRGB, outBgRGB, inFoRGB, inBgRGB;
 	private boolean writeLogs;
+	private String lastDir;
 
 	public void setDefaults() {
 		setWriteLogs(false);
@@ -79,5 +80,13 @@ public class Configuration {
 
 	public void setWriteLogs(boolean writeLogs) {
 		this.writeLogs = writeLogs;
+	}
+
+	public String getLastDir() {
+		return lastDir;
+	}
+
+	public void setLastDir(String lastDir) {
+		this.lastDir = lastDir;
 	}
 }

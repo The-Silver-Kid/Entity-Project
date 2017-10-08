@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -81,13 +82,28 @@ public class MasterControl {
 		FileDetect fd = new FileDetect("./ecfg.json");
 
 		if (fd.Detect()) {
-			File configFile = new File("./ecfg.json");
-			//Load config base
+			Gson g = new Gson();
+			BufferedReader broke;
+			try {
+				broke = new BufferedReader(new FileReader(new File("./ecfg.json")));
+				config = g.fromJson(broke, Configuration.class);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				System.exit(2);
+			}
+
 		} else {
 			config.setDefaults();
+			saveConf(config);
 		}
 
-		//p.log("Attempting load of configuration.");
+		if (config.isWriteLogs()) {
+			p = new LoggerPro(new String[] { "-", "#", "X" }, LoggerPro.FILE_AND_CONSOLE);
+		} else {
+			p = new LoggerPro(new String[] { "-", "#", "X" }, LoggerPro.CONSOLE_ONLY);
+		}
+
+		p.log("Load of configuration completed.");
 
 		ArrayList<Command> coms = new ArrayList<>(), plugs = new ArrayList<>();
 
@@ -187,7 +203,7 @@ public class MasterControl {
 				p.log(2, s.toString());
 		}
 		coms.addAll(plugs);
-		p.log("Plugin-able command injection finished.");
+		p.log("Pluginable command injection finished.");
 
 		cmands = new Command[coms.size()];
 		coms.toArray(cmands);
@@ -199,17 +215,17 @@ public class MasterControl {
 		for (Entity check : OC) {
 			File fff = new File(f.getAbsolutePath() + "/Images/" + check.getImagePath());
 			if (!fff.exists() && !check.getImagePath().equalsIgnoreCase("null.png"))
-				p.log(2, "Entity " + check.getAltName() + " has a specified image that doesnt exist!");
+				p.log(2, "Entity " + check.getAltName() + " has a specified image that doesn't exist!");
 			fff = new File(f.getAbsolutePath() + "/Images/" + check.getAltImagePath());
 			if (!fff.exists() && !check.getAltImagePath().equalsIgnoreCase("null.png"))
-				p.log(2, "Entity " + check.getAltName() + " has a specified alternate image that doesnt exist!");
+				p.log(2, "Entity " + check.getAltName() + " has a specified alternate image that doesn't exist!");
 
 		}
 
 		h = new EntityLoader(OC, compDay, p, f, cmands);
 
 		try {
-			poni = new Window(title, 1, 0, 0, 0, h, p, f);
+			poni = new Window(title, 1, 0, 0, config, h, p, f);
 			poni.punch();
 		} catch (ConfigException | IOException | NullPointerException e) {
 			p.log(2, "Window Creation Failed. Cannot Continue!");
@@ -312,12 +328,35 @@ public class MasterControl {
 	private static File findDir() {
 		empty = new JFrame();
 		empty.setVisible(true);
-		JFileChooser choose = new JFileChooser();
+		JFileChooser choose = new JFileChooser(config.getLastDir());
 		choose.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		choose.showDialog(null, "Open Directory");
 		empty.add(choose);
 
-		return choose.getSelectedFile();
+		File f = choose.getSelectedFile();
+
+		config.setLastDir(f.getAbsolutePath());
+
+		saveConf(config);
+
+		return f;
+	}
+
+	private static void saveConf(Configuration configuration) {
+		GsonBuilder gb = new GsonBuilder();
+		gb.setPrettyPrinting();
+		Gson g = gb.create();
+		String s = g.toJson(configuration);
+		byte[] b = s.getBytes();
+		try {
+			FileOutputStream out = new FileOutputStream("./ecfg.json");
+			out.write(b);
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
 	}
 
 	private static ArrayList<Command> plugins(File f) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
