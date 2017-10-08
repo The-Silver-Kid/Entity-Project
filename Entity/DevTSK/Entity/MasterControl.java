@@ -48,6 +48,7 @@ import DevTSK.Entity.Commands.Default.OtTxtColor;
 import DevTSK.Entity.Commands.Default.Today;
 import DevTSK.Entity.Commands.Default.WIP;
 import DevTSK.Util.Day;
+import DevTSK.Util.FileDetect;
 import DevTSK.Util.LoggerPro;
 import DevTSK.Util.DAG.ConfigException;
 
@@ -65,7 +66,7 @@ public class MasterControl {
 
 	private static ArrayList<Entity> list = new ArrayList<Entity>();
 
-	private static LoggerPro p = new LoggerPro(new String[] { "-", "#", "X" }, LoggerPro.FILE_AND_CONSOLE);
+	private static LoggerPro p;
 
 	private static Offset off = new Offset(0);
 
@@ -73,7 +74,21 @@ public class MasterControl {
 
 	private static JFrame empty;
 
+	private static Configuration config;
+
 	public static void main(String[] args) {
+		config = new Configuration();
+		FileDetect fd = new FileDetect("./ecfg.json");
+
+		if (fd.Detect()) {
+			File configFile = new File("./ecfg.json");
+			//Load config base
+		} else {
+			config.setDefaults();
+		}
+
+		//p.log("Attempting load of configuration.");
+
 		ArrayList<Command> coms = new ArrayList<>(), plugs = new ArrayList<>();
 
 		String title = "Entity Project";
