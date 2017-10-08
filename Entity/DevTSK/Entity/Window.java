@@ -236,6 +236,7 @@ public class Window {
 		setupConfig(config);
 		punch();
 		punch();
+		punch();
 		this.p.log("Window Constructed.");
 	}
 
@@ -391,6 +392,7 @@ public class Window {
 
 		int[] r = config.getBgRGB();
 		frmPoniiPic.getContentPane().setBackground(new Color(r[0], r[1], r[2]));
+		frmPoniiPicCont.getContentPane().setBackground(new Color(r[0], r[1], r[2]));
 
 		r = config.getInBgRGB();
 		lblTextArea.setBackground(new Color(r[0], r[1], r[2]));
