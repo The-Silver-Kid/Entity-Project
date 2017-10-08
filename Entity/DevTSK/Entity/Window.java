@@ -4,6 +4,7 @@
 package DevTSK.Entity;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
@@ -163,7 +164,7 @@ public class Window {
 		frmPoniiPic.setTitle(n + " Picture Window");
 		frmPoniiPic.setBackground(SystemColor.window);
 		frmPoniiPic.setResizable(false);
-		frmPoniiPic.setBounds(x, y, 700 + config.getWinSize(), 700 + config.getWinSize());
+		frmPoniiPic.setBounds(x, y, 700, 700);
 		p.log("Setting window size to " + (700 + config.getWinSize()));
 		if (close == 0) {
 			frmPoniiPic.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -186,23 +187,25 @@ public class Window {
 		frmPoniiPicCont.setTitle(n + " Control Window");
 		frmPoniiPicCont.setBackground(SystemColor.window);
 		frmPoniiPicCont.setResizable(false);
-		frmPoniiPicCont.setBounds(x + 700 + config.getWinSize(), y, 700 + config.getWinSize(), 500);
+		frmPoniiPicCont.setBounds(x + 700, y, 700 + config.getWinSize() * (config.getTextSize() - 11), 500);
 		frmPoniiPicCont.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPoniiPicCont.getContentPane().setLayout(null);
 		frmPoniiPicCont.setVisible(true);
 
 		lblPoniiPic = new JLabel();
-		lblPoniiPic.setBounds(0, 0, 700 + config.getWinSize(), 700 + config.getWinSize());
+		lblPoniiPic.setBounds(0, 0, 700, 700);
 		frmPoniiPic.getContentPane().add(lblPoniiPic);
 
 		lblCMPic = new JLabel();
-		lblCMPic.setBounds(350 + (config.getWinSize() / 2), 0, 350 + (config.getWinSize() / 2), 350 + (config.getWinSize() / 2));
+		lblCMPic.setBounds(350, 0, 350, 350);
 		frmPoniiPic.getContentPane().add(lblCMPic);
 
 		lblTextArea = new JTextField();
+		Font txtarea = lblTextArea.getFont();
 		lblTextArea.setToolTipText("Entity Name");
 		lblTextArea.setText("");
 		lblTextArea.setBounds(10, 10, 580, 20);
+		lblTextArea.setFont(new Font(txtarea.getName(), Font.PLAIN, config.getTextSize()));
 		frmPoniiPicCont.getContentPane().add(lblTextArea);
 
 		lblInfo = new JTextPane();
@@ -210,8 +213,9 @@ public class Window {
 		lblInfo.setToolTipText("Information box");
 		//lblInfo.setLineWrap(true);
 		lblInfo.setText("");
-		lblInfo.setBounds(10, 40, 670 + config.getWinSize(), 420);
+		lblInfo.setBounds(10, 40, 670 + config.getWinSize() * (config.getTextSize() - 11), 420);
 		lblInfo.setEditable(false);
+		lblInfo.setFont(lblTextArea.getFont());
 		frmPoniiPicCont.getContentPane().add(lblInfo);
 
 		Style style = lblInfo.getLogicalStyle();
