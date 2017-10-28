@@ -92,72 +92,6 @@ public class Window {
 
 		this.dir = dir;
 
-		//Honestly who uses the un-split window anymore? should i remove this?
-
-		/*if (CharRPWin == 0) {
-		
-			frmPoniiPic = new JFrame();
-			frmPoniiPic.getContentPane().setBackground(SystemColor.window);
-			frmPoniiPic
-					.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("/DevTSK/Entity/files/ikon.png")));
-			frmPoniiPic.setTitle(n);
-			frmPoniiPic.setBackground(SystemColor.window);
-			frmPoniiPic.setResizable(false);
-			frmPoniiPic.setBounds(x, y, 700, 900);
-			if (close == 0) {
-				frmPoniiPic.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-			} else if (close == 1) {
-				frmPoniiPic.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			} else {
-				try {
-					throw new Exception("Invalid Close Operation");
-				} catch (Exception e) {
-					e.printStackTrace();
-					frmPoniiPic.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-				}
-			}
-			frmPoniiPic.getContentPane().setLayout(null);
-			frmPoniiPic.setVisible(true);
-		
-			lblPoniiPic = new JLabel();
-			lblPoniiPic.setBounds(0, 0, 700, 700);
-			frmPoniiPic.getContentPane().add(lblPoniiPic);
-		
-			lblCMPic = new JLabel();
-			lblCMPic.setBounds(350, 0, 350, 350);
-			frmPoniiPic.getContentPane().add(lblCMPic);
-		
-			lblTextArea = new JTextField();
-			lblTextArea.setToolTipText("Entity Name");
-			lblTextArea.setText("");
-			lblTextArea.setBounds(10, 710, 580, 20);
-			frmPoniiPic.getContentPane().add(lblTextArea);
-		
-			lblInfo = new JTextPane();
-			//lblInfo.setWrapStyleWord(true);
-			lblInfo.setToolTipText("Information box");
-			//lblInfo.setLineWrap(true);
-			lblInfo.setText("");
-			lblInfo.setBounds(10, 740, 670, 120);
-			lblInfo.setEditable(false);
-			frmPoniiPic.getContentPane().add(lblInfo);
-		
-			Style style = lblInfo.getLogicalStyle();
-			StyleConstants.setTabSet(style, tabs);
-			lblInfo.setLogicalStyle(style);
-		
-			loltest = new JScrollPane(lblInfo);
-			loltest.setBounds(10, 740, 670, 120);
-			loltest.setAutoscrolls(true);
-			frmPoniiPic.getContentPane().add(loltest);
-		
-			in = new JButton();
-			in.setBounds(600, 710, 80, 20);
-			in.setAction(action);
-			frmPoniiPic.getRootPane().setDefaultButton(in);
-			frmPoniiPic.getContentPane().add(in);
-		}*/
-
 		frmPoniiPic = new JFrame();
 		frmPoniiPic.getContentPane().setBackground(SystemColor.window);
 		frmPoniiPic.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("/DevTSK/Entity/files/ikon.png")));
@@ -179,7 +113,6 @@ public class Window {
 			}
 		}
 		frmPoniiPic.getContentPane().setLayout(null);
-		frmPoniiPic.setVisible(true);
 
 		frmPoniiPicCont = new JFrame();
 		frmPoniiPicCont.getContentPane().setBackground(SystemColor.window);
@@ -190,7 +123,6 @@ public class Window {
 		frmPoniiPicCont.setBounds(x + 700, y, 700 + config.getWinSize() * (config.getTextSize() - 11), 500);
 		frmPoniiPicCont.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPoniiPicCont.getContentPane().setLayout(null);
-		frmPoniiPicCont.setVisible(true);
 
 		lblPoniiPic = new JLabel();
 		lblPoniiPic.setBounds(0, 0, 700, 700);
@@ -234,8 +166,10 @@ public class Window {
 		frmPoniiPicCont.getContentPane().add(in);
 
 		setupConfig(config);
-		punch();
-		punch();
+
+		frmPoniiPic.setVisible(true);
+
+		frmPoniiPicCont.setVisible(true);
 		punch();
 		this.p.log("Window Constructed.");
 	}
@@ -406,101 +340,4 @@ public class Window {
 		r = config.getOutBgRGB();
 		lblInfo.setBackground(new Color(r[0], r[1], r[2]));
 	}
-
-	/**
-	 * Converts the window type
-	 * 
-	 * @param String
-	 *            name
-	 * @param int
-	 *            default close operation
-	 * @param int
-	 *            x pos
-	 * @param int
-	 *            y pos
-	 */
-	/*	private void Convert(String n, int close, int x, int y) {
-	
-			int boxX = Toolkit.getDefaultToolkit().getScreenSize().width;
-			//boxX = 3840;
-			int boxY = Toolkit.getDefaultToolkit().getScreenSize().height;
-			//boxY = 2160;
-			p.log("Loaded window size of " + boxX + "x" + boxY);
-	
-			int funcY = (((boxY - 700) / 350) * 50);
-	
-			frmPoniiPic = new JFrame();
-			frmPoniiPic.getContentPane().setBackground(SystemColor.window);
-			frmPoniiPic
-					.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("/DevTSK/Entity/files/ikon.png")));
-			frmPoniiPic.setTitle(n + " Picture Window");
-			frmPoniiPic.setBackground(SystemColor.window);
-			frmPoniiPic.setResizable(false);
-			frmPoniiPic.setBounds(x, y, 700 + funcY, 700 + funcY);
-			p.log("Setting window size to " + (700 + funcY));
-			if (close == 0) {
-				frmPoniiPic.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-			} else if (close == 1) {
-				frmPoniiPic.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			} else {
-				try {
-					throw new Exception("Invalid Close Operation");
-				} catch (Exception e) {
-					e.printStackTrace();
-					frmPoniiPic.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-				}
-			}
-			frmPoniiPic.getContentPane().setLayout(null);
-	
-			frmPoniiPicCont = new JFrame();
-			frmPoniiPicCont.getContentPane().setBackground(SystemColor.window);
-			frmPoniiPicCont
-					.setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.getResource("/DevTSK/Entity/files/ikon.png")));
-			frmPoniiPicCont.setTitle(n + " Control Window");
-			frmPoniiPicCont.setBackground(SystemColor.window);
-			frmPoniiPicCont.setResizable(false);
-			frmPoniiPicCont.setBounds(x + 700 + funcY, y, 700, 500);
-			frmPoniiPicCont.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-			frmPoniiPicCont.getContentPane().setLayout(null);
-	
-			lblPoniiPic = new JLabel();
-			lblPoniiPic.setBounds(0, 0, 700 + funcY, 700 + funcY);
-			frmPoniiPic.getContentPane().add(lblPoniiPic);
-	
-			lblCMPic = new JLabel();
-			lblCMPic.setBounds((700 + funcY) / 2, 0, 350 + (funcY / 2), 350 + (funcY / 2));
-			frmPoniiPic.getContentPane().add(lblCMPic);
-	
-			lblTextArea = new JTextField();
-			lblTextArea.setToolTipText("Entity Name");
-			lblTextArea.setText("");
-			lblTextArea.setBounds(10, 10, 580, 20);
-			frmPoniiPicCont.getContentPane().add(lblTextArea);
-	
-			lblInfo = new JTextPane();
-			//lblInfo.setWrapStyleWord(true);
-			lblInfo.setToolTipText("Information box");
-			//lblInfo.setLineWrap(true);
-			lblInfo.setText("");
-			lblInfo.setBounds(10, 40, 670, 420);
-			lblInfo.setEditable(false);
-			frmPoniiPicCont.getContentPane().add(lblInfo);
-	
-			Style style = lblInfo.getLogicalStyle();
-			StyleConstants.setTabSet(style, tabs);
-			lblInfo.setLogicalStyle(style);
-	
-			loltest = new JScrollPane(lblInfo);
-			loltest.setBounds(lblInfo.getBounds());
-			loltest.setAutoscrolls(true);
-			frmPoniiPicCont.getContentPane().add(loltest);
-	
-			in = new JButton();
-			in.setBounds(600, 10, 80, 20);
-			in.setAction(action);
-			frmPoniiPicCont.getRootPane().setDefaultButton(in);
-			frmPoniiPicCont.getContentPane().add(in);
-	
-			p.log("Window is split.");
-		}*/
 }
