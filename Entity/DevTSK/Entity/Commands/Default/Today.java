@@ -34,7 +34,7 @@ public class Today implements Command {
 	@Override
 	public int run(Entity[] list, LoggerPro logbook, String[] sl) {
 		MasterControl.poni.printCl();
-		MasterControl.poni.println(MasterControl.compDay.toString(true));
+		MasterControl.poni.println(MasterControl.u.getOffset().getDay().toString(true));
 		return 0;
 	}
 

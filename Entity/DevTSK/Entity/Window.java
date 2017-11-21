@@ -53,8 +53,6 @@ public class Window {
 
 	private LoggerPro p;
 
-	private String name;
-
 	private File dir;
 
 	private TabSet tabs;
@@ -87,8 +85,6 @@ public class Window {
 		el = h;
 
 		this.p = p;
-
-		name = n;
 
 		this.dir = dir;
 

@@ -1,5 +1,6 @@
 package DevTSK.Entity;
 
+import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,12 +13,16 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import com.google.gson.Gson;
@@ -48,7 +53,6 @@ import DevTSK.Entity.Commands.Default.OtColor;
 import DevTSK.Entity.Commands.Default.OtTxtColor;
 import DevTSK.Entity.Commands.Default.Today;
 import DevTSK.Entity.Commands.Default.WIP;
-import DevTSK.Util.Day;
 import DevTSK.Util.FileDetect;
 import DevTSK.Util.LoggerPro;
 import DevTSK.Util.DAG.ConfigException;
@@ -61,23 +65,27 @@ import DevTSK.Util.DAG.ConfigException;
 public class MasterControl {
 
 	private static EntityLoader h;
-	public static String charsetname = "null";
+	private static String workdir;
 	public static Window poni;
-	public static Day compDay;
-
-	private static ArrayList<Entity> list = new ArrayList<Entity>();
 
 	private static LoggerPro p;
-
-	private static Offset off = new Offset(0);
 
 	private static Command[] cmands;
 
 	private static JFrame empty;
+	private static JComboBox<String> comboBox;
 
 	private static Configuration config;
 
-	public static void main(String[] args) {
+	static boolean selected = false;
+	private static int sel = -1;
+
+	public static Multiverse m;
+	public static Universe u;
+
+	private final static Action action = new Suniv();
+
+	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
 		config = new Configuration();
 		FileDetect fd = new FileDetect("./ecfg.json");
 
@@ -107,64 +115,74 @@ public class MasterControl {
 
 		ArrayList<Command> coms = new ArrayList<>(), plugs = new ArrayList<>();
 
-		String title = "Entity Project";
-
 		File f = findDir();
 		empty.dispose();
 		empty.setVisible(false);
 
+		workdir = f.getAbsolutePath();
+
+		fd = new FileDetect(workdir + "/Multiverse.json");
+
+		if (!fd.Detect())
+			try {
+				throw new FileNotFoundException();
+			} catch (FileNotFoundException e) {
+				p.log("Could not locate Multiverse.json");
+				e.printStackTrace();
+				System.exit(3);
+			}
+
 		p.log("Loading external Entity classes");
 		try {
-			findClasses(f, "/Classes/", true);
+			findClasses(workdir + "/Classes/", true);
 		} catch (NullPointerException e) {
 			p.log("User cancelled Entity Pack choosing... System will exit.");
 			System.exit(0);
 		}
 		p.log("Loading of external classes finished.");
 
-		p.log("Looking for packInfo.bin");
-		File packinfo = new File(f.getAbsolutePath() + "/packInfo.bin");
-		if (packinfo.exists() && !packinfo.isDirectory()) {
-			p.log("Pack information found! Attempting to load.");
-			try {
-				FileInputStream in = new FileInputStream(f.getAbsolutePath() + "/packInfo.bin");
-				byte[] result = new byte[in.available()];
-				in.read(result);
-				in.close();
-				char[] ch = new char[result.length];
-				for (int i = 0; i < ch.length; i++)
-					ch[i] = (char) result[i];
-				title = new StringBuilder().append(ch).toString();
-			} catch (Exception e) {
-				p.log(2, "Something went wrong whilst trying to read packInfo.bin");
-				p.log(2, e.getMessage());
-				for (StackTraceElement s : e.getStackTrace())
-					p.log(2, s.toString());
-			}
-		} else {
-			p.log(2, "No packInfo.bin found. This may be bad!");
-		}
-
-		p.log("Attempting to load files.");
+		p.log("Beginning Initilization Phase.");
 
 		GsonBuilder bldr = new GsonBuilder();
 		bldr.registerTypeAdapter(Entity.class, new EntityAdapter());
 		Gson g = bldr.create();
 
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(new File(f.getAbsolutePath() + "/Offset.json")));
-			off = g.fromJson(br, Offset.class);
-			compDay = off.getDay();
-		} catch (FileNotFoundException e) {
-			p.log(2, "Something went wrong trying to load the offset date. Continuing without.");
-			p.log(2, e.getMessage());
-			for (StackTraceElement s : e.getStackTrace())
-				p.log(2, s.toString());
+		p.log("Creating Multiverse.");
+		BufferedReader br = new BufferedReader(new FileReader(new File(workdir + "/Multiverse.json")));
+		m = g.fromJson(br, Multiverse.class);
+
+		p.log("Picking Area.");
+		empty.dispose();
+
+		empty = new JFrame();
+		empty.setSize(540, 80);
+		empty.getContentPane().setLayout(null);
+		comboBox = new JComboBox<String>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(m.getRawAreaList()));
+		comboBox.setBounds(10, 5, 400, 22);
+		empty.getContentPane().add(comboBox);
+		JButton b = new JButton();
+		b.setBounds(415, 5, 100, 22);
+		b.setAction(MasterControl.action);
+		empty.getContentPane().add(b);
+		empty.setVisible(true);
+
+		while (!selected) {
+			Thread.sleep(100);
 		}
+
+		p.log("User has selected.");
+
+		sel = comboBox.getSelectedIndex();
+
+		empty.dispose();
+
+		br = new BufferedReader(new FileReader(new File(workdir + m.getAreaList()[sel])));
+		u = g.fromJson(br, Universe.class);
 
 		Entity[] OC = new Entity[] {};
 		try {
-			OC = deserializeJSONFiles(f, g);
+			OC = deserializeJSONFiles(u.getEntityList(), g);
 		} catch (Exception e1) {
 			p.log(2, "Something went wrong in loading entities! Cannot Continue");
 			p.log(2, e1.getMessage());
@@ -173,7 +191,6 @@ public class MasterControl {
 			System.exit(1);
 		}
 
-		//Adding default commands
 		coms.add(new Help());
 		coms.add(new BGColor());
 		coms.add(new InColor());
@@ -208,24 +225,24 @@ public class MasterControl {
 		cmands = new Command[coms.size()];
 		coms.toArray(cmands);
 
-		File ff = new File(f.getAbsolutePath() + "/Images/");
+		File ff = new File(workdir + "/Images/");
 		if (!ff.exists())
 			ff.mkdir();
 
 		for (Entity check : OC) {
-			File fff = new File(f.getAbsolutePath() + "/Images/" + check.getImagePath());
+			File fff = new File(workdir + "/Images/" + check.getImagePath());
 			if (!fff.exists() && !check.getImagePath().equalsIgnoreCase("null.png"))
 				p.log(2, "Entity " + check.getAltName() + " has a specified image that doesn't exist!");
-			fff = new File(f.getAbsolutePath() + "/Images/" + check.getAltImagePath());
+			fff = new File(workdir + "/Images/" + check.getAltImagePath());
 			if (!fff.exists() && !check.getAltImagePath().equalsIgnoreCase("null.png"))
 				p.log(2, "Entity " + check.getAltName() + " has a specified alternate image that doesn't exist!");
 
 		}
 
-		h = new EntityLoader(OC, compDay, p, f, cmands);
+		h = new EntityLoader(OC, u.getOffset().getDay(), p, f, cmands);
 
 		try {
-			poni = new Window(title, 1, 0, 0, config, h, p, f);
+			poni = new Window(u.getTitle() + " - " + u.getName(), 1, 0, 0, config, h, p, f);
 			poni.punch();
 		} catch (ConfigException | IOException | NullPointerException e) {
 			p.log(2, "Window Creation Failed. Cannot Continue!");
@@ -242,65 +259,21 @@ public class MasterControl {
 		method.invoke(ClassLoader.getSystemClassLoader(), new Object[] { file.toURI().toURL() });
 	}
 
-	private static Entity[] deserializeJSONFiles(File f, Gson g) throws Exception {
-		if (!f.exists())
-			f.mkdirs();
-		if (f.exists() && f.isDirectory()) {
+	private static Entity[] deserializeJSONFiles(String[] in, Gson g) throws Exception {
+		Entity[] e = new Entity[in.length];
 
-			String[] dirs = f.list(new FilenameFilter() {
-				public boolean accept(File current, String name) {
-					return (new File(current, name).isDirectory() && !new File(current, name).isHidden());
-				}
-			});
+		BufferedReader br;
 
-			recurse(dirs, 3, f, g);
-
-			Entity[] ret = new Entity[list.size()];
-			for (int i = 0; i < list.size(); i++)
-				ret[i] = list.get(i);
-			return ret;
-		} else if (f.exists() && !f.isDirectory()) {
-			throw new MalformedURLException(f.getName() + " is a file not a folder");
-		} else {
-			throw new Exception("Unspecified error in " + f.getAbsolutePath());
+		for (int i = 0; i < in.length; i++) {
+			br = new BufferedReader(new FileReader(new File(workdir + in[i])));
+			e[i] = g.fromJson(br, Entity.class);
 		}
+
+		return e;
 	}
 
-	private static void recurse(String[] strs, int i, File f, Gson gs) throws FileNotFoundException {
-		if (i < 0)
-			return;
-		for (String s : strs) {
-			File g = new File(f.getAbsolutePath() + "/" + s);
-			Entity[] es = findEntity(g, gs);
-			for (Entity e : es)
-				list.add(e);
-			String[] dirs = g.list(new FilenameFilter() {
-				public boolean accept(File current, String name) {
-					return (new File(current, name).isDirectory() && !new File(current, name).isHidden());
-				}
-			});
-			recurse(dirs, i - 1, g, gs);
-		}
-	}
-
-	private static Entity[] findEntity(File f, Gson g) throws FileNotFoundException {
-		FileFilter ff = new FileFilter(".json");
-		File[] jsonFiles = f.listFiles(ff);
-		Entity[] ret = new Entity[] {};
-		if (jsonFiles.length >= 1)
-			ret = new Entity[jsonFiles.length];
-		if (!(ret.length == 0))
-			for (int i = 0; i < jsonFiles.length; i++) {
-				BufferedReader br = new BufferedReader(new FileReader(jsonFiles[i]));
-				ret[i] = g.fromJson(br, Entity.class);
-			}
-		else
-			ret = new Entity[] {};
-		return ret;
-	}
-
-	private static void findClasses(File f, String ext, Boolean announce) {
-		File dir = new File(f.getAbsolutePath() + ext);
+	private static void findClasses(String ext, Boolean announce) {
+		File dir = new File(ext);
 		if (!dir.exists())
 			dir.mkdirs();
 		if (dir.exists() && dir.isDirectory()) {
@@ -360,7 +333,7 @@ public class MasterControl {
 	}
 
 	private static ArrayList<Command> plugins(File f) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
-		File master = new File(f.getAbsolutePath() + "/plugins");
+		File master = new File(workdir + "/plugins");
 		p.log("Looking in " + master.getAbsolutePath() + " for plugins...");
 		ArrayList<Command> ret = new ArrayList<>();
 		if (master.exists()) {
@@ -383,7 +356,7 @@ public class MasterControl {
 				zip.close();
 			}
 
-			findClasses(f, "/plugins/", false);
+			findClasses(workdir + "/plugins/", false);
 
 			for (int i = 0; i < classNames.size(); i++) {
 				Class<?> clazz = Class.forName(classNames.get(i));
@@ -445,4 +418,24 @@ class EntityAdapter implements JsonSerializer<Entity>, JsonDeserializer<Entity> 
 			throw new JsonParseException("Unknown element type: " + type, cnfe);
 		}
 	}
+}
+
+class Suniv extends AbstractAction {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * makes the button look beautiful.
+	 */
+	public Suniv() {
+		putValue(NAME, "Run");
+		putValue(SHORT_DESCRIPTION, "Pushes string to internal system.");
+	}
+
+	/**
+	 * Sends the input box text to the Entity Loader for processing.
+	 */
+	public void actionPerformed(ActionEvent arg0) {
+		MasterControl.selected = true;
+	}
+
 }
