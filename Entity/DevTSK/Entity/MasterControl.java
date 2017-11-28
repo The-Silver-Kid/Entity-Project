@@ -37,6 +37,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import DevTSK.Entity.Commands.Command;
 import DevTSK.Entity.Commands.Default.BGColor;
+import DevTSK.Entity.Commands.Default.BRSTMPLY;
 import DevTSK.Entity.Commands.Default.Build;
 import DevTSK.Entity.Commands.Default.Charset;
 import DevTSK.Entity.Commands.Default.ConfigurationSave;
@@ -208,6 +209,7 @@ public class MasterControl {
 		coms.add(new Exit());
 		coms.add(new Build());
 		coms.add(new Today());
+		coms.add(new BRSTMPLY());
 
 		p.log("Attempting to load pluginable commands");
 		try {

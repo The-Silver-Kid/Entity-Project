@@ -8,5 +8,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/EntityProject/libs/gson-2.8.0-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="libs/GCN_ADM.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
