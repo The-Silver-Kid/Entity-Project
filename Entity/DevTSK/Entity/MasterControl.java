@@ -87,6 +87,10 @@ public class MasterControl {
 	private final static Action action = new Suniv();
 
 	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
+		run();
+	}
+
+	private static void run() throws FileNotFoundException, InterruptedException {
 		config = new Configuration();
 		FileDetect fd = new FileDetect("./ecfg.json");
 
