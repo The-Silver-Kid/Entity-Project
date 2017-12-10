@@ -1,7 +1,7 @@
 package DevTSK.Entity;
 
 import java.io.File;
-import java.io.FileOutputStream;
+// import java.io.FileOutputStream;
 import java.io.IOException;
 import DevTSK.Entity.Commands.Command;
 import DevTSK.Util.Day;
@@ -23,7 +23,7 @@ public class EntityLoader {
 
 	public final Day compDay;
 
-	private static FileOutputStream send;
+	//	private static FileOutputStream send;
 
 	public final File WORKING_DIR;
 
@@ -480,12 +480,12 @@ public class EntityLoader {
 		return XD;
 	}
 
-	/**
+	/*
 	 * Extracts the default configuration.
 	 * Only used when the original could not be found.
 	 * 
 	 * @throws IOException
-	 */
+	 *
 	public void extractConfig() throws IOException {
 		Boolean preformAction = true;
 		if (preformAction) {
@@ -500,5 +500,5 @@ public class EntityLoader {
 			System.out.println("Extracted : " + charToExtract + " to \"" + f.getAbsoluteFile() + "\"");
 			send.close();
 		}
-	}
+	}*/
 }

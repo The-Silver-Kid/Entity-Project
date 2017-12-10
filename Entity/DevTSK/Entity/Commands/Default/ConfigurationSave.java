@@ -2,6 +2,7 @@ package DevTSK.Entity.Commands.Default;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import com.google.gson.Gson;
 import DevTSK.Entity.Entity;
 import DevTSK.Entity.MasterControl;
 import DevTSK.Entity.Commands.Command;
@@ -38,27 +39,38 @@ public class ConfigurationSave implements Command {
 		System.out.println("Saving Configuration...");
 
 		byte[] tst = new byte[] {};
-		String strnj = "version = 2.0;\n\n" + "bgr = "
-				+ MasterControl.poni.frmPoniiPic.getContentPane().getBackground().getRed() + ";\n" + "bgg = "
-				+ MasterControl.poni.frmPoniiPic.getContentPane().getBackground().getGreen() + ";\n" + "bgb = "
-				+ MasterControl.poni.frmPoniiPic.getContentPane().getBackground().getBlue() + ";\n\n" + "inbr = "
-				+ MasterControl.poni.lblTextArea.getBackground().getRed() + ";\n" + "inbg = "
-				+ MasterControl.poni.lblTextArea.getBackground().getGreen() + ";\n" + "inbb = "
-				+ MasterControl.poni.lblTextArea.getBackground().getBlue() + ";\n\n" + "infr = "
-				+ MasterControl.poni.lblTextArea.getForeground().getRed() + ";\n" + "infg = "
-				+ MasterControl.poni.lblTextArea.getForeground().getGreen() + ";\n" + "infb = "
-				+ MasterControl.poni.lblTextArea.getForeground().getBlue() + ";\n\n" + "outbr = "
-				+ MasterControl.poni.lblInfo.getBackground().getRed() + ";\n" + "outbg = "
-				+ MasterControl.poni.lblInfo.getBackground().getGreen() + ";\n" + "outbb = "
-				+ MasterControl.poni.lblInfo.getBackground().getBlue() + ";\n\n" + "outfr = "
-				+ MasterControl.poni.lblInfo.getForeground().getRed() + ";\n" + "outfg = "
-				+ MasterControl.poni.lblInfo.getForeground().getGreen() + ";\n" + "outfb = "
-				+ MasterControl.poni.lblInfo.getForeground().getBlue() + ";\n\n" + "sep = " + "true;";
-		// + "frame = " + framew + ";";
-		tst = strnj.getBytes();
+		Gson g = new Gson();
+
+		MasterControl.config.setBgRGB(new int[] {
+				MasterControl.poni.frmPoniiPic.getContentPane().getBackground().getRed(),
+				MasterControl.poni.frmPoniiPic.getContentPane().getBackground().getGreen(),
+				MasterControl.poni.frmPoniiPic.getContentPane().getBackground().getBlue()
+		});
+		MasterControl.config.setInBgRGB(new int[] {
+				MasterControl.poni.lblInfo.getBackground().getRed(),
+				MasterControl.poni.lblInfo.getBackground().getGreen(),
+				MasterControl.poni.lblInfo.getBackground().getBlue()
+		});
+		MasterControl.config.setOutBgRGB(new int[] {
+				MasterControl.poni.lblTextArea.getBackground().getRed(),
+				MasterControl.poni.lblTextArea.getBackground().getGreen(),
+				MasterControl.poni.lblTextArea.getBackground().getBlue()
+		});
+		MasterControl.config.setInFoRGB(new int[] {
+				MasterControl.poni.lblInfo.getForeground().getRed(),
+				MasterControl.poni.lblInfo.getForeground().getGreen(),
+				MasterControl.poni.lblInfo.getForeground().getBlue()
+		});
+		MasterControl.config.setOutFoRGB(new int[] {
+				MasterControl.poni.lblTextArea.getForeground().getRed(),
+				MasterControl.poni.lblTextArea.getForeground().getGreen(),
+				MasterControl.poni.lblTextArea.getForeground().getBlue()
+		});
+
+		tst = g.toJson(MasterControl.config).getBytes();
 
 		try {
-			FileOutputStream send = new FileOutputStream("./EntityConfig.cfg");
+			FileOutputStream send = new FileOutputStream("./ecfg.json");
 			send.write(tst);
 			send.close();
 		} catch (IOException e) {

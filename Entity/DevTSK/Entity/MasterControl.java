@@ -76,7 +76,7 @@ public class MasterControl {
 	private static JFrame empty;
 	private static JComboBox<String> comboBox;
 
-	private static Configuration config;
+	public static Configuration config;
 
 	static boolean selected = false;
 	private static int sel = -1;

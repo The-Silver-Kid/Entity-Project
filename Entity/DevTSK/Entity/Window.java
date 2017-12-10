@@ -27,7 +27,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 import DevTSK.Util.LoggerPro;
-import DevTSK.Util.DAG.Config;
 import DevTSK.Util.DAG.ConfigException;
 
 /**
@@ -303,11 +302,7 @@ public class Window {
 	 * @throws ConfigException
 	 */
 	public void punch() throws ConfigException {
-		if (new Config("./EntityConfig.cfg").getDouble("version") < 2.0) {
-			printCl();
-			println("If you are seeing this something went wrong"
-					+ "\nIt is probably my fault...");
-		}
+
 	}
 
 	/**
