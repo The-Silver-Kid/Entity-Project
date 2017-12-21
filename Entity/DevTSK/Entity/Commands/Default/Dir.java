@@ -22,12 +22,12 @@ public class Dir implements Command {
 
 	@Override
 	public String getSyntax() {
-		return null;
+		return "dir";
 	}
 
 	@Override
 	public String getHelp() {
-		return null;
+		return "Returns the working directory.";
 	}
 
 	@Override

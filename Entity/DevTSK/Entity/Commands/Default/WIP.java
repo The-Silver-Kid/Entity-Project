@@ -25,12 +25,12 @@ public class WIP implements Command {
 
 	@Override
 	public String getSyntax() {
-		return null;
+		return "wip";
 	}
 
 	@Override
 	public String getHelp() {
-		return null;
+		return "dumps a list of entities who are missing images or contain 'WIP' in descriptions.";
 	}
 
 	@Override

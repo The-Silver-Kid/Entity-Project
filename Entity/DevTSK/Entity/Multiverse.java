@@ -1,5 +1,7 @@
 package DevTSK.Entity;
 
+import java.util.ArrayList;
+
 public class Multiverse {
 	private String[] aList;
 
@@ -12,6 +14,16 @@ public class Multiverse {
 
 	public String[] getRawAreaList() {
 		return aList;
+	}
+
+	public void addElement(String s) {
+		ArrayList<String> e = new ArrayList<String>();
+		String[] ss = new String[aList.length + 1];
+		for (int i = 0; i < aList.length; i++)
+			e.add(aList[i]);
+		e.add(s);
+		e.toArray(ss);
+		aList = ss;
 	}
 
 	@Deprecated

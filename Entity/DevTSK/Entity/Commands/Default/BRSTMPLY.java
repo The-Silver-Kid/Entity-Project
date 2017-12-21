@@ -23,12 +23,12 @@ public class BRSTMPLY implements Command {
 
 	@Override
 	public String getSyntax() {
-		return null;
+		return "BRSTM <BRSTM file / stop>";
 	}
 
 	@Override
 	public String getHelp() {
-		return null;
+		return "Plays and loops ADPCM BRSTM Files.";
 	}
 
 	@Override

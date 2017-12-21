@@ -1,5 +1,7 @@
 package DevTSK.Entity;
 
+import java.util.ArrayList;
+
 public class Universe {
 	private String name, title;
 	private String[] eList;
@@ -11,6 +13,16 @@ public class Universe {
 
 	public String getName() {
 		return name;
+	}
+
+	public void addElement(String s) {
+		ArrayList<String> e = new ArrayList<String>();
+		String[] ss = new String[eList.length + 1];
+		for (int i = 0; i < eList.length; i++)
+			e.add(eList[i]);
+		e.add(s);
+		e.toArray(ss);
+		eList = ss;
 	}
 
 	public String[] getEntityList() {

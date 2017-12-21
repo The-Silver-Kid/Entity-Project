@@ -40,6 +40,10 @@ public abstract class Entity {
 		return marriedTo;
 	}
 
+	public Day getBirthday() {
+		return birthday;
+	}
+
 	public abstract String getInfo();
 
 	public abstract String getName();

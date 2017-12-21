@@ -20,7 +20,7 @@ public class ConfigurationSave implements Command {
 
 	@Override
 	public String[] getTokens() {
-		return new String[] { "CFG" };
+		return new String[] { "CFG", "Save-Config", "Save", "config" };
 	}
 
 	@Override

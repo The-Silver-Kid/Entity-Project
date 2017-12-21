@@ -9,25 +9,21 @@ public class Today implements Command {
 
 	@Override
 	public boolean isHidden() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public String[] getTokens() {
-		// TODO Auto-generated method stub
-		return new String[] { "Today" };
+		return new String[] { "Today", "day" };
 	}
 
 	@Override
 	public String getSyntax() {
-		// TODO Auto-generated method stub
 		return "Today";
 	}
 
 	@Override
 	public String getHelp() {
-		// TODO Auto-generated method stub
 		return "Returns current date";
 	}
 

@@ -225,7 +225,7 @@ public class Window {
 	 *
 	 */
 	private class SwingAction extends AbstractAction {
-		private static final long serialVersionUID = 3646194311743048047L;
+		private static final long serialVersionUID = 0L;
 
 		/**
 		 * makes the button look beautiful.

@@ -17,7 +17,7 @@ public class Help implements Command {
 
 	@Override
 	public String[] getTokens() {
-		return new String[] { "Help" };
+		return new String[] { "Help", "cmds" };
 	}
 
 	@Override
@@ -32,16 +32,21 @@ public class Help implements Command {
 
 	@Override
 	public int run(Entity[] list, LoggerPro logbook, String[] sl) {
+		int ignore = 1;
+		if (sl.length > 1) {
+			if (sl[1].equalsIgnoreCase("-all"))
+				ignore = 0;
+		}
 		MasterControl.poni.printCl();
 		int t = 1;
 		String XD = "";
 		for (int i = 0; i < MasterControl.poni.el.commands.length; i++)
-			if (!MasterControl.poni.el.commands[i].isHidden()) {
+			if (!MasterControl.poni.el.commands[i].isHidden() || ignore == 0) {
 				XD = XD + "\n" + t + ". " + MasterControl.poni.el.commands[i].getSyntax() + "\t" + MasterControl.poni.el.commands[i].getHelp();
 				t++;
 			}
-		MasterControl.poni.println("\n\nApplicable MasterControl.poni.el.commands : "
-				+ (MasterControl.poni.el.commands.length - MasterControl.poni.el.commandsHidden)
+		MasterControl.poni.println("\n\nApplicable Commands : "
+				+ (MasterControl.poni.el.commands.length - (ignore * MasterControl.poni.el.commandsHidden))
 				+ "\nRGB Values are in decimal and range from 0-255\n"
 				+ XD);
 		logbook.log("Command " + sl[0] + " completed successfully.");
