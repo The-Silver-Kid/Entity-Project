@@ -2,9 +2,12 @@ package DevTSK.Entity;
 
 public class Configuration {
 
+	public static final float VER = 2.0f;
+
+	private float version;
 	private int textSize, winSize = -1;
 	private int[] bgRGB, outFoRGB, outBgRGB, inFoRGB, inBgRGB;
-	private boolean writeLogs;
+	private boolean writeLogs, fancyNames;
 	private String lastDir;
 
 	public void setDefaults() {
@@ -16,6 +19,12 @@ public class Configuration {
 		setOutBgRGB(new int[] { 255, 255, 255 });
 		setInFoRGB(new int[] { 0, 0, 0 });
 		setInBgRGB(new int[] { 255, 255, 255 });
+		fancyNames = false;
+		version = VER;
+	}
+
+	public float getVersion() {
+		return version;
 	}
 
 	public int getTextSize() {
@@ -88,5 +97,9 @@ public class Configuration {
 
 	public void setLastDir(String lastDir) {
 		this.lastDir = lastDir;
+	}
+
+	public boolean isUseTitles() {
+		return fancyNames;
 	}
 }

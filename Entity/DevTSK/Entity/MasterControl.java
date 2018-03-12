@@ -108,6 +108,11 @@ public class MasterControl {
 			saveConf(config);
 		}
 
+		if (config.getVersion() != Configuration.VER) {
+			config.setDefaults();
+			saveConf(config);
+		}
+
 		if (config.isWriteLogs()) {
 			p = new LoggerPro(new String[] { "-", "#", "X" }, LoggerPro.FILE_AND_CONSOLE);
 		} else {
@@ -161,7 +166,7 @@ public class MasterControl {
 		empty.setSize(540, 80);
 		empty.getContentPane().setLayout(null);
 		comboBox = new JComboBox<String>();
-		comboBox.setModel(new DefaultComboBoxModel<String>(m.getRawAreaList()));
+		comboBox.setModel(new DefaultComboBoxModel<String>(m.getNames()));
 		comboBox.setBounds(10, 5, 400, 22);
 		empty.getContentPane().add(comboBox);
 		JButton b = new JButton();
@@ -180,7 +185,7 @@ public class MasterControl {
 
 		empty.dispose();
 
-		br = new BufferedReader(new FileReader(new File(workdir + m.getAreaList()[sel])));
+		br = new BufferedReader(new FileReader(new File(workdir + m.getJsonNames()[sel])));
 		u = g.fromJson(br, Universe.class);
 
 		Entity[] OC = new Entity[] {};
@@ -243,8 +248,15 @@ public class MasterControl {
 
 		h = new EntityLoader(OC, u.getOffset().getDay(), p, f, cmands);
 
+		String nome;
+
+		if (config.isUseTitles())
+			nome = m.getSetName() + " - " + u.getName();
+		else
+			nome = m.getTitle() + "." + u.toString();
+
 		try {
-			poni = new Window(u.getTitle() + " - " + u.getName(), 1, 0, 0, config, h, p, f);
+			poni = new Window(nome, 1, 0, 0, config, h, p, f);
 			poni.punch();
 		} catch (ConfigException | IOException | NullPointerException e) {
 			p.log(2, "Window Creation Failed. Cannot Continue!");

@@ -1,18 +1,39 @@
 package DevTSK.Entity;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 public class Universe {
 	private String name, title;
 	private String[] eList;
-	private Offset offset;
+	private int x, y;
+	private Color colour;
+	private Location offset;
 
-	public String getTitle() {
-		return title;
+	public Universe(int x, int y, int N) {
+		name = "test" + N;
+		title = "TestRun : " + N;
+		eList = new String[] {};
+		this.x = x;
+		this.y = y;
+		colour = new Color(0xFFFFFFFF);
+		offset = new Location(0, x, y);
+	}
+
+	public int[] getCoords() {
+		return new int[] { x, y };
+	}
+
+	public Color getColor() {
+		return colour;
+	}
+
+	public String toString() {
+		return name + offset.toString();
 	}
 
 	public String getName() {
-		return name;
+		return title;
 	}
 
 	public void addElement(String s) {
@@ -36,7 +57,7 @@ public class Universe {
 		return eList;
 	}
 
-	public Offset getOffset() {
+	public Location getOffset() {
 		return offset;
 	}
 }
