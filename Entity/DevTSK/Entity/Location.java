@@ -19,4 +19,8 @@ public class Location {
 	public String toString() {
 		return "[" + xC + ", " + yC + "]";
 	}
+
+	public int[] getCoords() {
+		return new int[] { xC, yC };
+	}
 }

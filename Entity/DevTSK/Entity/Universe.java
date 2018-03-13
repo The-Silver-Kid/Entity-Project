@@ -7,7 +7,7 @@ public class Universe {
 	private String name, title;
 	private String[] eList;
 	private int x, y;
-	private Color colour;
+	private Kolor colour;
 	private Location offset;
 
 	public Universe(int x, int y, int N) {
@@ -16,7 +16,7 @@ public class Universe {
 		eList = new String[] {};
 		this.x = x;
 		this.y = y;
-		colour = new Color(0xFFFFFFFF);
+		colour = new Kolor(0xFF, 0xFF, 0xFF);
 		offset = new Location(0, x, y);
 	}
 
@@ -25,7 +25,7 @@ public class Universe {
 	}
 
 	public Color getColor() {
-		return colour;
+		return colour.getColor();
 	}
 
 	public String toString() {

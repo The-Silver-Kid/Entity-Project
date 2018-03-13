@@ -19,10 +19,6 @@ import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import com.google.gson.Gson;
@@ -72,17 +68,15 @@ public class MasterControl {
 	private static Command[] cmands;
 
 	private static JFrame empty;
-	private static JComboBox<String> comboBox;
 
 	public static Configuration config;
 
 	static boolean selected = false;
-	private static int sel = -1;
+	static int sel = -1;
 
 	public static Multiverse m;
 	public static Universe u;
-
-	private final static Action action = new Suniv();
+	public static Universe[] verses;
 
 	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
 		run();
@@ -159,20 +153,16 @@ public class MasterControl {
 		BufferedReader br = new BufferedReader(new FileReader(new File(workdir + "/Multiverse.json")));
 		m = g.fromJson(br, Multiverse.class);
 
+		verses = new Universe[m.getNames().length];
+		for (int i = 0; i < verses.length; i++) {
+			br = new BufferedReader(new FileReader(new File(workdir + m.getJsonNames()[i])));
+			verses[i] = g.fromJson(br, Universe.class);
+		}
+
 		p.log("Picking Area.");
 		empty.dispose();
 
-		empty = new JFrame();
-		empty.setSize(540, 80);
-		empty.getContentPane().setLayout(null);
-		comboBox = new JComboBox<String>();
-		comboBox.setModel(new DefaultComboBoxModel<String>(m.getNames()));
-		comboBox.setBounds(10, 5, 400, 22);
-		empty.getContentPane().add(comboBox);
-		JButton b = new JButton();
-		b.setBounds(415, 5, 100, 22);
-		b.setAction(MasterControl.action);
-		empty.getContentPane().add(b);
+		empty = new uSelector(m.getWidth(), m.getHeight());
 		empty.setVisible(true);
 
 		while (!selected) {
@@ -180,8 +170,6 @@ public class MasterControl {
 		}
 
 		p.log("User has selected.");
-
-		sel = comboBox.getSelectedIndex();
 
 		empty.dispose();
 
