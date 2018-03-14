@@ -117,7 +117,13 @@ public class MasterControl {
 
 		ArrayList<Command> coms = new ArrayList<>(), plugs = new ArrayList<>();
 
-		File f = findDir();
+		File f = new File("/");
+		try {
+			f = findDir();
+		} catch (NullPointerException e) {
+			p.log(1, "User did not select a file. Exiting...");
+			System.exit(0);
+		}
 		empty.dispose();
 		empty.setVisible(false);
 
@@ -233,6 +239,9 @@ public class MasterControl {
 				p.log(2, "Entity " + check.getAltName() + " has a specified alternate image that doesn't exist!");
 
 		}
+
+		p.log("Creating Window");
+		p.log(1, "Oh great power that shakes my very soul!");
 
 		h = new EntityLoader(OC, u.getOffset().getDay(), p, f, cmands);
 
